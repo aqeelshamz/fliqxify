@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netflixclone/utils/colors.dart';
+import 'package:netflixclone/utils/general.dart';
 import 'package:netflixclone/utils/size.dart';
+import 'package:netflixclone/widgets/thumbnail_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     return Column(children: [
       Center(
         child: Text(
-          "LOGO",
+          appName.toUpperCase(),
           style: TextStyle(
             color: primaryColor,
             fontWeight: FontWeight.bold,
@@ -45,18 +47,7 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: width * 0.025),
-                    width: width * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(borderRadius * 2),
-                      image: DecorationImage(
-                          image: Image.network(
-                                  "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(1).png")
-                              .image,
-                          fit: BoxFit.cover),
-                    ),
-                  );
+                  return ThumbnailCard(heroId: "${index}mylist", imageUrl: "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(1).png");
                 },
               ),
             ),
@@ -77,18 +68,7 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: width * 0.025),
-                    width: width * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(borderRadius * 2),
-                      image: DecorationImage(
-                          image: Image.network(
-                                  "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%2019.png")
-                              .image,
-                          fit: BoxFit.cover),
-                    ),
-                  );
+                  return ThumbnailCard(heroId: "${index}or", imageUrl: "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%2019.png");
                 },
               ),
             ),
@@ -109,18 +89,7 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: width * 0.025),
-                    width: width * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(borderRadius * 2),
-                      image: DecorationImage(
-                          image: Image.network(
-                            "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png",
-                          ).image,
-                          fit: BoxFit.cover),
-                    ),
-                  );
+                  return ThumbnailCard(heroId: "${index}tr", imageUrl: "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png");
                 },
               ),
             ),

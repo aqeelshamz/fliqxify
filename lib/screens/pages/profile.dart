@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/bottom_navigation.dart';
 import 'package:netflixclone/screens/get_started.dart';
+import 'package:netflixclone/screens/settings.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
@@ -98,10 +99,42 @@ class _ProfileState extends State<Profile> {
         ),
         ListTile(
           onTap: () {},
+          leading: Icon(FeatherIcons.tv, color: white),
+          trailing: Icon(FeatherIcons.chevronRight, color: white),
+          title: Text(
+            "My Watchlist",
+            style: TextStyle(
+              color: white,
+              fontSize: 15.sp,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: height * 0.02,
+        ),
+        ListTile(
+          onTap: () {},
           leading: Icon(FeatherIcons.lock, color: white),
           trailing: Icon(FeatherIcons.chevronRight, color: white),
           title: Text(
             "Change Password",
+            style: TextStyle(
+              color: white,
+              fontSize: 15.sp,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: height * 0.02,
+        ),
+        ListTile(
+          onTap: () {
+            Get.to(()=>const Settings());
+          },
+          leading: Icon(FeatherIcons.settings, color: white),
+          trailing: Icon(FeatherIcons.chevronRight, color: white),
+          title: Text(
+            "Settings",
             style: TextStyle(
               color: white,
               fontSize: 15.sp,

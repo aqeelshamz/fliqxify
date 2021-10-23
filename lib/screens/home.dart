@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: EdgeInsets.all(width * 0.04),
           child: PageView(
-            physics: const BouncingScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
             onPageChanged: (index) {
               bottomNavigationProvider.changeIndex(index);
