@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:netflixclone/screens/add_profile.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
@@ -174,7 +176,9 @@ class _PlansState extends State<Plans> {
                   : Padding(
                       padding: EdgeInsets.only(top: height * 0.02),
                       child: LargeButton(
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(()=>const AddProfile());
+                        },
                         label: "CONTINUE TO PAYMENT",
                       ),
                     ),
