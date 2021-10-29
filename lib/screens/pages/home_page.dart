@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/general.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/thumbnail_card.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,17 +16,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(children: [
       Center(
-        child: Text(
-          appName.toUpperCase(),
-          style: TextStyle(
-            color: primaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 17.sp,
-          ),
-        ),
+        child: Image.asset("assets/images/textLogo.png", width: width * 0.4),
       ),
       SizedBox(height: height * 0.02),
       Expanded(
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
           physics: const BouncingScrollPhysics(),
           children: [
             Text(
-              "My List",
+              "Popular",
               style: TextStyle(
                 color: white,
                 fontSize: 18.sp,
@@ -47,7 +47,10 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return ThumbnailCard(heroId: "${index}mylist", imageUrl: "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(1).png");
+                  return ThumbnailCard(
+                      heroId: "${index}mylist",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(1).png");
                 },
               ),
             ),
@@ -68,7 +71,10 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return ThumbnailCard(heroId: "${index}or", imageUrl: "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%2019.png");
+                  return ThumbnailCard(
+                      heroId: "${index}or",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%2019.png");
                 },
               ),
             ),
@@ -89,7 +95,10 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return ThumbnailCard(heroId: "${index}tr", imageUrl: "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png");
+                  return ThumbnailCard(
+                      heroId: "${index}tr",
+                      imageUrl:
+                          "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png");
                 },
               ),
             ),
@@ -98,5 +107,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     ]);
+  }
+
+  getPopularMovies() async {
+    var response =
+        await http.get(Uri.parse("$tmdbUrl/movie/popular?api_key=$tmdbApiKey"));
+    print(response.body);
   }
 }

@@ -2,8 +2,9 @@
     package="com.example.netflixclone">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="netflixclone"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Fliqxify"
+        android:icon="@mipmap/launcher_icon"
+        android:roundIcon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

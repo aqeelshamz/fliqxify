@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/screens/get_started.dart';
 import 'package:netflixclone/utils/colors.dart';
-import 'package:netflixclone/utils/general.dart';
 import 'package:netflixclone/utils/size.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,16 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
         color: backgroundColor,
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                appName.toUpperCase(),
-                style: TextStyle(
-                  color: primaryColor,
-                  fontSize: 40,
-                ),
-              ),
-              CircularProgressIndicator(color: grey),
+              const SizedBox(),
+              Image.asset("assets/images/textLogo.png", width: width * 0.7),
+              const CircularProgressIndicator(),
             ],
           ),
         ),

@@ -45,22 +45,22 @@ class _HomeState extends State<Home> {
               icon: Icon(
                 FeatherIcons.home,
               ),
-              label: ""),
+              label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(
                 FeatherIcons.search,
               ),
-              label: ""),
+              label: "Search"),
           BottomNavigationBarItem(
               icon: Icon(
                 FeatherIcons.download,
               ),
-              label: ""),
+              label: "Downloads"),
           BottomNavigationBarItem(
               icon: Icon(
                 FeatherIcons.user,
               ),
-              label: "")
+              label: "Profile")
         ],
       ),
       body: SafeArea(
