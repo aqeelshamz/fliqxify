@@ -11,7 +11,11 @@ import 'package:netflixclone/widgets/large_button.dart';
 int _selectedPlan = -1;
 
 class Plans extends StatefulWidget {
-  const Plans({Key? key}) : super(key: key);
+  final String fullName;
+  final String email;
+  final String password;
+
+  Plans(this.fullName, this.email, this.password);
 
   @override
   _PlansState createState() => _PlansState();

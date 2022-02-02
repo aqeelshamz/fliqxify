@@ -7,7 +7,6 @@ import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
 import 'package:netflixclone/widgets/large_button.dart';
 import 'package:netflixclone/widgets/link_button.dart';
-import 'package:netflixclone/widgets/text_box.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);
@@ -49,7 +48,28 @@ class _VerifyEmailState extends State<VerifyEmail> {
                 ),
               ),
               SizedBox(height: height * 0.02),
-              const TextBox(hintText: "Enter verification code"),
+              TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  fillColor: grey1,
+                  filled: true,
+                  hintText: "Verification Code",
+                  hintStyle: TextStyle(color: grey3),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: width * 0.04),
+                  suffixIcon: null,
+                  prefixIcon: null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(
+                  color: white,
+                  fontSize: 15.sp,
+                ),
+                onChanged: (e) {},
+              ),
               SizedBox(height: height * 0.02),
               LargeButton(
                 onTap: () {

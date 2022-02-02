@@ -9,9 +9,11 @@ import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
 import 'package:netflixclone/widgets/large_button.dart';
 import 'package:netflixclone/widgets/link_button.dart';
-import 'package:netflixclone/widgets/text_box.dart';
-
 bool _showPassword = false;
+
+String _fullName = "";
+String _email = "";
+String _password = "";
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -44,27 +46,94 @@ class _SignUpState extends State<SignUp> {
                 ],
               ),
               SizedBox(height: height * 0.03),
-              const TextBox(
-                hintText: "Full Name",
-              ),
-              SizedBox(height: height * 0.02),
-              const TextBox(
-                hintText: "Email",
-              ),
-              SizedBox(height: height * 0.02),
-              TextBox(
-                obscureText: !_showPassword,
-                hintText: "Password",
-                suffixIcon: IconButton(
-                  icon: Icon(
-                      !_showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
-                      color: grey3),
-                  onPressed: () {
-                    setState(() {
-                      _showPassword = !_showPassword;
-                    });
-                  },
+              TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  fillColor: grey1,
+                  filled: true,
+                  hintText: "Full name",
+                  hintStyle: TextStyle(color: grey3),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: width * 0.04),
+                  suffixIcon: null,
+                  prefixIcon: null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
+                style: TextStyle(
+                  color: white,
+                  fontSize: 15.sp,
+                ),
+                onChanged: (txt) {
+                  setState(() {
+                    _fullName = txt; 
+                  });
+                },
+              ),
+              SizedBox(height: height * 0.02),
+              TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  fillColor: grey1,
+                  filled: true,
+                  hintText: "Email",
+                  hintStyle: TextStyle(color: grey3),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: width * 0.04),
+                  suffixIcon: null,
+                  prefixIcon: null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(
+                  color: white,
+                  fontSize: 15.sp,
+                ),
+                onChanged: (txt) {
+                  setState(() {
+                    _email = txt;
+                  });
+                },
+              ),
+              SizedBox(height: height * 0.02),
+              TextField(
+                obscureText: !_showPassword,
+                decoration: InputDecoration(
+                  fillColor: grey1,
+                  filled: true,
+                  hintText: "Password",
+                  hintStyle: TextStyle(color: grey3),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: width * 0.04),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        !_showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
+                        color: grey3),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
+                  prefixIcon: null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(
+                  color: white,
+                  fontSize: 15.sp,
+                ),
+                onChanged: (txt) {
+                  setState(() {
+                    _password = txt;
+                  });
+                },
               ),
               SizedBox(height: height * 0.02),
               Row(children: [
@@ -113,7 +182,10 @@ class _SignUpState extends State<SignUp> {
               SizedBox(height: height * 0.04),
               LargeButton(
                   onTap: () {
-                    Get.to(() => const Plans());
+                    Get.to(() => Plans(_fullName, _email, _password));
+                    print(_email);
+                    print(_fullName);
+                    print(_password);
                   },
                   label: "CONTINUE"),
               Row(

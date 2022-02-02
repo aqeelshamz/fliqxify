@@ -3,7 +3,6 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
-import 'package:netflixclone/widgets/text_box.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
@@ -13,9 +12,26 @@ class Search extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextBox(
-          hintText: "Search",
-          prefixIcon: Icon(FeatherIcons.search, color: grey3),
+        TextField(
+          obscureText: false,
+          decoration: InputDecoration(
+            fillColor: grey1,
+            filled: true,
+            hintText: "Search",
+            hintStyle: TextStyle(color: grey3),
+            contentPadding: EdgeInsets.symmetric(horizontal: width * 0.04),
+            suffixIcon: null,
+            prefixIcon: Icon(FeatherIcons.search, color: grey3),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          style: TextStyle(
+            color: white,
+            fontSize: 15.sp,
+          ),
+          onChanged: (e) {},
         ),
         SizedBox(height: height * 0.04),
         Expanded(

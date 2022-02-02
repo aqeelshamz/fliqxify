@@ -7,7 +7,6 @@ import 'package:lottie/lottie.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/large_button.dart';
-import 'package:netflixclone/widgets/text_box.dart';
 import 'package:netflixclone/widgets/thumbnail_card.dart';
 import 'package:like_button/like_button.dart';
 
@@ -309,12 +308,31 @@ class _MovieDetailsState extends State<MovieDetails>
                         )
                       : Column(
                           children: [
-                            TextBox(
-                              prefixIcon: Icon(
-                                FeatherIcons.edit2,
-                                color: grey3,
+                            TextField(
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                fillColor: grey1,
+                                filled: true,
+                                hintText: "Write a review...",
+                                hintStyle: TextStyle(color: grey3),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: width * 0.04),
+                                suffixIcon: null,
+                                prefixIcon: Icon(
+                                  FeatherIcons.edit2,
+                                  color: grey3,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(borderRadius),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
-                              hintText: "Write a review..",
+                              style: TextStyle(
+                                color: white,
+                                fontSize: 15.sp,
+                              ),
+                              onChanged: (e) {},
                             ),
                             SizedBox(height: height * 0.02),
                             Column(children: getReviews()),

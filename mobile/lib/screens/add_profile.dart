@@ -7,7 +7,6 @@ import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
 import 'package:netflixclone/widgets/large_button.dart';
-import 'package:netflixclone/widgets/text_box.dart';
 
 class AddProfile extends StatefulWidget {
   const AddProfile({Key? key}) : super(key: key);
@@ -71,7 +70,28 @@ class _AddProfileState extends State<AddProfile> {
                 ),
               ),
               SizedBox(height: height * 0.04),
-              const TextBox(hintText: "Profile name"),
+              TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  fillColor: grey1,
+                  filled: true,
+                  hintText: "Profile name",
+                  hintStyle: TextStyle(color: grey3),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: width * 0.04),
+                  suffixIcon: null,
+                  prefixIcon: null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(
+                  color: white,
+                  fontSize: 15.sp,
+                ),
+                onChanged: (e) {},
+              ),
               SizedBox(height: height * 0.02),
               LargeButton(
                 onTap: () {
