@@ -9,6 +9,10 @@ const planSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
+    month: {
+        type:Number,
+        required: true,
+    },
     features: {
         type: Array,
         required: true,
