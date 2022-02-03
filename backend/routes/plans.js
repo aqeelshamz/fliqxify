@@ -38,6 +38,7 @@ const plans = [
 ];
 
 router.get("/", async (req, res) => {
+  console.log(req.body);
   res.send(plans);
 });
 

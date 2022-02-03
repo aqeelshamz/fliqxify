@@ -21,6 +21,8 @@ router.post("/register", async (req, res) => {
 
   try {
     const data = await schema.validateAsync(req.body);
+    const user = await User.findOne({ email: data.email });
+    if (user) return res.status(401).send("Email already used");
     const passwordString = data.password;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(passwordString, salt);
@@ -58,6 +60,7 @@ router.post("/login", async (req, res) => {
     await User.updateOne({ email: data.email }, { token: token });
     return res.send(await User.findOne({ email: data.email }));
   } catch (err) {
+    console.log(err)
     return res.status(500).send("Something went wrong");
   }
 });
@@ -104,7 +107,6 @@ router.post("/reset-password", validate, async (req, res) => {
     await User.findByIdAndUpdate(req.user._id, { password: hashedPassword });
     return res.send("Password changed!");
   } catch (err) {
-    console.log(err)
     return res.status(500).send("Something went wrong");
   }
 });
