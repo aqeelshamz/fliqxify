@@ -12,7 +12,8 @@ const reviewSchema = mongoose.Schema(
     },
     profilePic: {
       type: String,
-      required: true,
+      required: false,
+      default: ""
     },
     username: {
       type: String,
