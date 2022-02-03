@@ -32,6 +32,10 @@ const userSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    watchlist: {
+      type: Array,
+      default: []
+    }
   },
   { timestamps: true }
 );
