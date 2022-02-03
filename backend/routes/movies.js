@@ -20,13 +20,15 @@ router.post("/trailer", async (req, res) => {
           console.log(response.data);
           let videos = response.data.results;
           let trailerUrl = "";
+          let thumbnail = "";
           for(var video of videos){
             if(video.name.toString().toLowerCase().includes("trailer")){
                 trailerUrl = "https://youtube.com/watch?v=" + video.key;
+                thumbnail = `https://img.youtube.com/vi/${video.key}/0.jpg`;
                 break;
             }
           }
-          return res.json({trailer_url: trailerUrl});
+          return res.json({url: trailerUrl, thumbnail: thumbnail});
       })
       .catch((err) => {
         return res.status(500).send("Something went wrong");
