@@ -48,9 +48,11 @@ router.post("/get-reviews", async (req, res) => {
 
   try {
     const data = await schema.validateAsync(req.body);
-    return res.send(await Review.find({ movieId: data.movieId }).sort({_id: -1}));
+    return res.send(
+      await Review.find({ movieId: data.movieId }).sort({ _id: -1 })
+    );
   } catch (err) {
-    console.log(err)
+    console.log(err);
 
     return res.status(500).send("Something went wrong");
   }
@@ -75,7 +77,7 @@ router.post("/post-review", validate, async (req, res) => {
     await newReview.save();
     return res.send("Review posted");
   } catch (err) {
-      console.log(err)
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 });
