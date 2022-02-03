@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatelessWidget {
   const Search({Key? key}) : super(key: key);
@@ -61,7 +64,7 @@ class Search extends StatelessWidget {
 
   getWidgets() {
     List<Widget> widgets = [];
-    for (int i = 1; i <= 9; i++) {
+    for (int i = 0; i < Provider.of<MoviesProvider>(Get.context!, listen: false).categories.length; i++) {
       widgets.add(Column(
         children: [
           Expanded(
@@ -71,7 +74,7 @@ class Search extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadius * 2),
                 image: DecorationImage(
                     image: Image.network(
-                      "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png",
+                      Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["image"],
                     ).image,
                     fit: BoxFit.cover),
               ),
@@ -79,7 +82,7 @@ class Search extends StatelessWidget {
           ),
           SizedBox(height: height * 0.01),
           Text(
-            "Comedy",
+            Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["name"],
             style: TextStyle(
               color: white,
               fontSize: 12.sp,

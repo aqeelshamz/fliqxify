@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:netflixclone/providers/bottom_navigation.dart';
+import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/splash_screen.dart';
 import 'package:netflixclone/utils/colors.dart';
@@ -23,7 +24,8 @@ class App extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<BottomNavigationProvider>(
               create: (_) => BottomNavigationProvider()),
-          ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
+          ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
+          ChangeNotifierProvider<MoviesProvider>(create: (_) => MoviesProvider()),
         ],
         child: Builder(
           builder: (context) => GetMaterialApp(

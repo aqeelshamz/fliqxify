@@ -4,15 +4,16 @@ import 'package:netflixclone/screens/movie_details.dart';
 import 'package:netflixclone/utils/size.dart';
 
 class ThumbnailCard extends StatelessWidget {
+  final String movieId;
   final String imageUrl;
   final String heroId;
-  const ThumbnailCard({Key? key, required this.heroId, required this.imageUrl}) : super(key: key);
+  const ThumbnailCard({Key? key, required this.movieId, required this.heroId, required this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Get.to(()=> MovieDetails(heroId: heroId, posterImage: imageUrl,));
+        Get.to(()=> MovieDetails(movieId: movieId, heroId: heroId, posterImage: imageUrl,));
       },
       child: Container(
         margin: EdgeInsets.only(right: width * 0.025),

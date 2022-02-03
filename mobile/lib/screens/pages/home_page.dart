@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
@@ -7,6 +8,9 @@ import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/thumbnail_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+
+bool _loadingPopular = true;
+bool _loadingTopRated = true;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
+    getData();
     super.initState();
   }
 
@@ -59,21 +64,30 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: height * 0.02),
             SizedBox(
               height: height * 0.2,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return ThumbnailCard(
-                      heroId: "${index}mylist",
-                      imageUrl:
-                          "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(1).png");
-                },
-              ),
+              child: _loadingPopular
+                  ? Container(
+                      margin: EdgeInsets.only(right: width * 0.025),
+                      height: height * 0.2,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return ThumbnailCard(
+                            movieId: Provider.of<MoviesProvider>(context)
+                                .popular[index]["id"]
+                                .toString(),
+                            heroId: "${index}mylist",
+                            imageUrl: "https://image.tmdb.org/t/p/w200" +
+                                Provider.of<MoviesProvider>(context)
+                                    .popular[index]["poster_path"]);
+                      },
+                    ),
             ),
             SizedBox(height: height * 0.04),
             Text(
-              "Netflix Originals",
+              "Top Rated",
               style: TextStyle(
                 color: white,
                 fontSize: 18.sp,
@@ -83,41 +97,26 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: height * 0.02),
             SizedBox(
               height: height * 0.2,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return ThumbnailCard(
-                      heroId: "${index}or",
-                      imageUrl:
-                          "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%2019.png");
-                },
-              ),
-            ),
-            SizedBox(height: height * 0.04),
-            Text(
-              "Trending now",
-              style: TextStyle(
-                color: white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: height * 0.02),
-            SizedBox(
-              height: height * 0.2,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return ThumbnailCard(
-                      heroId: "${index}tr",
-                      imageUrl:
-                          "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png");
-                },
-              ),
+              child: _loadingTopRated
+                  ? Container(
+                      margin: EdgeInsets.only(right: width * 0.025),
+                      height: height * 0.2,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return ThumbnailCard(
+                            movieId: Provider.of<MoviesProvider>(context)
+                                .topRated[index]["id"]
+                                .toString(),
+                            heroId: "${index}tr",
+                            imageUrl: "https://image.tmdb.org/t/p/w200" +
+                                Provider.of<MoviesProvider>(context)
+                                    .topRated[index]["poster_path"]);
+                      },
+                    ),
             ),
             SizedBox(height: height * 0.02),
           ],
@@ -126,9 +125,20 @@ class _HomePageState extends State<HomePage> {
     ]);
   }
 
-  getPopularMovies() async {
-    var response =
-        await http.get(Uri.parse("$tmdbUrl/movie/popular?api_key=$tmdbApiKey"));
-    print(response.body);
+  void getData() async {
+    setState(() {
+      _loadingPopular = true;
+      _loadingTopRated = true;
+    });
+
+    await Provider.of<MoviesProvider>(context, listen: false).getPopular();
+    setState(() {
+      _loadingPopular = false;
+    });
+
+    await Provider.of<MoviesProvider>(context, listen: false).getTopRated();
+    setState(() {
+      _loadingTopRated = false;
+    });
   }
 }
