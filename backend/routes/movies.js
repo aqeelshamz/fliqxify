@@ -4,6 +4,7 @@ const joi = require("joi");
 const axios = require("axios");
 const Review = require("../models/Review");
 const User = require("../models/User");
+const { validate } = require("../middlewares/validate");
 
 router.post("/trailer", async (req, res) => {
   const schema = joi.object({
