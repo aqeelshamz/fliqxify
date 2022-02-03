@@ -48,7 +48,7 @@ router.post("/get-reviews", async (req, res) => {
 
   try {
     const data = await schema.validateAsync(req.body);
-    return res.send(await Review.find({ movieId: data.movieId }));
+    return res.send(await Review.find({ movieId: data.movieId }).sort({_id: -1}));
   } catch (err) {
     console.log(err)
 
