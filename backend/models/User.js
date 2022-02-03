@@ -35,6 +35,10 @@ const userSchema = mongoose.Schema(
     watchlist: {
       type: Array,
       default: []
+    },
+    continueWatching: {
+      type: Array,
+      default: []
     }
   },
   { timestamps: true }
