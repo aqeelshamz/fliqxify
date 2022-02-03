@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
+import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/languages.dart';
@@ -20,8 +22,15 @@ bool _showReviews = false;
 bool _liked = false;
 bool _loading = true;
 bool _loadingTrailer = true;
+bool _postingReview = false;
+bool _loadingReviews = false;
 
 Map trailer = {};
+
+String _reviewText = "";
+TextEditingController _reviewTextController = TextEditingController();
+
+List reviews = [];
 
 class MovieDetails extends StatefulWidget {
   final String movieId;
@@ -40,16 +49,14 @@ class MovieDetails extends StatefulWidget {
 
 class _MovieDetailsState extends State<MovieDetails>
     with TickerProviderStateMixin {
-  late final AnimationController _controller;
-
   @override
   void initState() {
     setState(() {
       _showReviews = false;
     });
     getData();
+    getReviews();
     super.initState();
-    _controller = AnimationController(vsync: this);
   }
 
   @override
@@ -361,6 +368,7 @@ class _MovieDetailsState extends State<MovieDetails>
                             : Column(
                                 children: [
                                   TextField(
+                                    controller: _reviewTextController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       fillColor: grey1,
@@ -369,9 +377,34 @@ class _MovieDetailsState extends State<MovieDetails>
                                       hintStyle: TextStyle(color: grey3),
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: width * 0.04),
-                                      suffixIcon: IconButton(
-                                          icon: const Icon(FeatherIcons.send),
-                                          onPressed: () {}),
+                                      suffixIcon: _postingReview
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Center(
+                                                    child: Text(
+                                                      "Posting...",
+                                                      style: TextStyle(
+                                                        color: primaryColor,
+                                                        fontSize: 10.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : _reviewText.isEmpty
+                                              ? const SizedBox.shrink()
+                                              : IconButton(
+                                                  icon: const Icon(
+                                                      FeatherIcons.send),
+                                                  onPressed: () {
+                                                    postReview();
+                                                  }),
                                       prefixIcon: Icon(
                                         FeatherIcons.edit2,
                                         color: grey3,
@@ -386,10 +419,26 @@ class _MovieDetailsState extends State<MovieDetails>
                                       color: white,
                                       fontSize: 15.sp,
                                     ),
-                                    onChanged: (e) {},
+                                    onChanged: (txt) {
+                                      setState(() {
+                                        _reviewText = txt;
+                                      });
+                                    },
                                   ),
                                   SizedBox(height: height * 0.02),
-                                  Column(children: getReviews()),
+                                  reviews.isEmpty
+                                      ? SizedBox(
+                                          height: height * 0.1,
+                                          child: Center(
+                                              child: Text(
+                                            "No Reviews",
+                                            style: TextStyle(
+                                              color: white,
+                                              fontSize: 15.sp,
+                                            ),
+                                          )),
+                                        )
+                                      : Column(children: getReviewWidgets()),
                                 ],
                               ),
                       ],
@@ -401,9 +450,9 @@ class _MovieDetailsState extends State<MovieDetails>
     ));
   }
 
-  getReviews() {
+  getReviewWidgets() {
     List<Widget> widgets = [];
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 0; i < reviews.length; i++) {
       widgets.add(
         Container(
           padding: EdgeInsets.all(width * 0.025),
@@ -426,7 +475,7 @@ class _MovieDetailsState extends State<MovieDetails>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "User",
+                            reviews[i]["username"],
                             style: TextStyle(
                               color: white,
                               fontSize: 10.sp,
@@ -434,7 +483,7 @@ class _MovieDetailsState extends State<MovieDetails>
                             ),
                           ),
                           Text(
-                            "It's an awesome movie",
+                            reviews[i]["review"],
                             style: TextStyle(
                               color: white,
                               fontSize: 12.sp,
@@ -459,7 +508,7 @@ class _MovieDetailsState extends State<MovieDetails>
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    "100",
+                    "0",
                     style: TextStyle(
                       color: white.withOpacity(0.8),
                       fontSize: 8.sp,
@@ -507,6 +556,69 @@ class _MovieDetailsState extends State<MovieDetails>
 
     setState(() {
       _loadingTrailer = false;
+    });
+  }
+
+  void postReview() async {
+    setState(() {
+      _postingReview = true;
+    });
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
+      "Content-Type": "application/json"
+    };
+    Map<String, dynamic> body = {
+      "movieId": widget.movieId,
+      "review": _reviewText
+    };
+
+    var response = await http.post(
+      Uri.parse("$serverURL/movies/post-review"),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Review Posted", backgroundColor: primaryColor);
+      _reviewTextController.clear();
+      setState(() {
+        _reviewText = "";
+      });
+      getReviews();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Failed to post review", backgroundColor: errorRed);
+    }
+
+    setState(() {
+      _postingReview = false;
+    });
+  }
+
+  void getReviews() async {
+    setState(() {
+      _loadingReviews = true;
+    });
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
+      "Content-Type": "application/json"
+    };
+    Map<String, dynamic> body = {
+      "movieId": widget.movieId,
+    };
+
+    var response = await http.post(
+      Uri.parse("$serverURL/movies/get-reviews"),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    setState(() {
+      reviews = jsonDecode(response.body);
+      _loadingReviews = false;
     });
   }
 }
