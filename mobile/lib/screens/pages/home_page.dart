@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
-import 'package:netflixclone/utils/general.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/thumbnail_card.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,6 +32,22 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            Text(
+              "Hi " + Provider.of<UserProvider>(context).name + " 👋",
+              style: TextStyle(
+                color: white,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "Welcome to Fliqxify.",
+              style: TextStyle(
+                color: white.withOpacity(0.6),
+                fontSize: 14.sp,
+              ),
+            ),
+            SizedBox(height: height * 0.02),
             Text(
               "Popular",
               style: TextStyle(

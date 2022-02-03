@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/bottom_navigation.dart';
+import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/get_started.dart';
 import 'package:netflixclone/screens/settings.dart';
 import 'package:netflixclone/utils/colors.dart';
@@ -74,7 +75,7 @@ class _ProfileState extends State<Profile> {
             onPressed: () {},
           ),
           title: Text(
-            "Sample User",
+            Provider.of<UserProvider>(context).name,
             style: TextStyle(
               color: white,
               fontSize: 15.sp,
@@ -87,7 +88,7 @@ class _ProfileState extends State<Profile> {
         ListTile(
           leading: Icon(FeatherIcons.atSign, color: white),
           title: Text(
-            "sampleuser@gmail.com",
+            Provider.of<UserProvider>(context).email,
             style: TextStyle(
               color: white,
               fontSize: 15.sp,

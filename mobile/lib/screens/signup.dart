@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/screens/plans.dart';
 import 'package:netflixclone/screens/signin.dart';
@@ -9,6 +10,7 @@ import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
 import 'package:netflixclone/widgets/large_button.dart';
 import 'package:netflixclone/widgets/link_button.dart';
+
 bool _showPassword = false;
 
 String _fullName = "";
@@ -23,6 +25,16 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _fullName = "";
+      _email = "";
+      _password = "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +80,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 onChanged: (txt) {
                   setState(() {
-                    _fullName = txt; 
+                    _fullName = txt;
                   });
                 },
               ),
@@ -142,13 +154,24 @@ class _SignUpState extends State<SignUp> {
                   height: height * 0.005,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(borderRadius),
-                      color: successGreen),
+                      color: Colors.grey),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: _password.length < 6 ? width * 0.05 : width * 0.4,
+                        height: height * 0.005,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(borderRadius),
+                            color: _password.length < 6 ? errorRed : successGreen),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(width: width * 0.02),
                 Text(
-                  "Excellent",
+                  _password.length < 6 ? "Bad" : "Excellent",
                   style: TextStyle(
-                    color: successGreen,
+                    color:  _password.length < 6 ? errorRed : successGreen,
                     fontWeight: FontWeight.w500,
                     fontSize: 11.5.sp,
                   ),
@@ -182,10 +205,16 @@ class _SignUpState extends State<SignUp> {
               SizedBox(height: height * 0.04),
               LargeButton(
                   onTap: () {
-                    Get.to(() => Plans(_fullName, _email, _password));
-                    print(_email);
-                    print(_fullName);
-                    print(_password);
+                    if (_fullName == "") {
+                      Fluttertoast.showToast(msg: "Enter Full Name");
+                    } else if (!GetUtils.isEmail(_email)) {
+                      Fluttertoast.showToast(msg: "Enter a valid email");
+                    } else if (_password.length < 6) {
+                      Fluttertoast.showToast(
+                          msg: "Password must have atleast 6 characters");
+                    } else {
+                      Get.to(() => Plans(_fullName, _email, _password));
+                    }
                   },
                   label: "CONTINUE"),
               Row(
