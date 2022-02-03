@@ -148,6 +148,7 @@ class _ProfileState extends State<Profile> {
         ListTile(
           onTap: () {
             Provider.of<BottomNavigationProvider>(context, listen: false).changeIndex(0);
+            Provider.of<UserProvider>(context, listen: false).logout();
             Get.offAll(() => const GetStarted());
           },
           leading: Icon(FeatherIcons.logOut, color: white),
