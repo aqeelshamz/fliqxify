@@ -59,6 +59,7 @@ router.post("/get-reviews", async (req, res) => {
 });
 
 router.post("/post-review", validate, async (req, res) => {
+    console.log(req.body);
   const schema = joi.object({
     movieId: joi.string().required(),
     review: joi.string().required(),
