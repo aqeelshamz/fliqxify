@@ -24,7 +24,7 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
       initialVideoId: YoutubePlayer.convertUrlToId(widget.trailerUrl)!,
       flags: const YoutubePlayerFlags(
         autoPlay: true,
-        mute: true,
+        mute: false,
       ),
     );
 
