@@ -84,6 +84,21 @@ router.post("/post-review", validate, async (req, res) => {
   }
 });
 
+router.post("/delete-review", async (req, res)=>{
+  const schema = joi.object({
+    reviewId: joi.string().required(),
+  });
+
+  try{
+    const data = await schema.validateAsync(req.body);
+    await Review.findByIdAndDelete(data.reviewId);
+    return res.send("Review deleted!");
+  }
+  catch(err){
+    return res.status(500).send("Something went wrong");
+  }
+})
+
 router.post("/like", validate, async (req, res) => {
   const schema = joi.object({
     reviewId: joi.string().required(),
