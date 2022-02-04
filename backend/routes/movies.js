@@ -92,10 +92,10 @@ router.post("/like", validate, async (req, res) => {
     const data = await schema.validateAsync(req.body);
     const review = await Review.findById(data.reviewId);
     let likes = review.likes;
-    if (likes.includes(req.user._id)) {
-      likes.splice(likes.indexOf(req.user._id), 1);
+    if (likes.includes(req.user.email)) {
+      likes.splice(likes.indexOf(req.user.email), 1);
     } else {
-      likes.push(req.user._id);
+      likes.push(req.user.email);
     }
     await Review.findByIdAndUpdate(data.reviewId, { likes: likes });
 
