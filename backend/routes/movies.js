@@ -59,7 +59,7 @@ router.post("/get-reviews", async (req, res) => {
 });
 
 router.post("/post-review", validate, async (req, res) => {
-    console.log(req.body);
+  console.log(req.body);
   const schema = joi.object({
     movieId: joi.string().required(),
     review: joi.string().required(),
@@ -79,6 +79,28 @@ router.post("/post-review", validate, async (req, res) => {
     return res.send("Review posted");
   } catch (err) {
     console.log(err);
+    return res.status(500).send("Something went wrong");
+  }
+});
+
+router.post("/like", validate, async (req, res) => {
+  const schema = joi.object({
+    reviewId: joi.string().required(),
+  });
+
+  try {
+    const data = await schema.validateAsync(req.body);
+    const review = await Review.findById(data.reviewId);
+    let likes = review.likes;
+    if (likes.includes(req.user._id)) {
+      likes.splice(likes.indexOf(req.user._id), 1);
+    } else {
+      likes.push(req.user._id);
+    }
+    await Review.findByIdAndUpdate(data.reviewId, { likes: likes });
+
+    return res.send("Like updated");
+  } catch (err) {
     return res.status(500).send("Something went wrong");
   }
 });
