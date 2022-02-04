@@ -5,6 +5,7 @@ const axios = require("axios");
 const Review = require("../models/Review");
 const User = require("../models/User");
 const { validate } = require("../middlewares/validate");
+const Del = require("../models/Del");
 
 router.post("/trailer", async (req, res) => {
   const schema = joi.object({
@@ -84,20 +85,26 @@ router.post("/post-review", validate, async (req, res) => {
   }
 });
 
-router.post("/delete-review", async (req, res)=>{
+router.post("/delete-review", async (req, res) => {
   const schema = joi.object({
     reviewId: joi.string().required(),
   });
 
-  try{
+  try {
     const data = await schema.validateAsync(req.body);
+    const review = await Review.findById(data.reviewId);
+    const delRev = new Del({
+      movieId: review.movieId,
+      review: review.review,
+      email: review.email,
+    });
+    await delRev.save();
     await Review.findByIdAndDelete(data.reviewId);
     return res.send("Review deleted!");
-  }
-  catch(err){
+  } catch (err) {
     return res.status(500).send("Something went wrong");
   }
-})
+});
 
 router.post("/like", validate, async (req, res) => {
   const schema = joi.object({
