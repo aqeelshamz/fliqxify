@@ -19,6 +19,10 @@ const reviewSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     likes: {
       type: Array,
       required: false,

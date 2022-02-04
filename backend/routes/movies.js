@@ -73,6 +73,7 @@ router.post("/post-review", validate, async (req, res) => {
       review: data.review,
       profilePic: user.profilePic,
       username: user.name,
+      email: user.email,
     });
 
     await newReview.save();
