@@ -130,7 +130,7 @@ class _ProfileState extends State<Profile> {
         ),
         ListTile(
           onTap: () {
-            Get.to(()=>const Settings());
+            Get.to(() => const Settings());
           },
           leading: Icon(FeatherIcons.settings, color: white),
           trailing: Icon(FeatherIcons.chevronRight, color: white),
@@ -147,9 +147,51 @@ class _ProfileState extends State<Profile> {
         ),
         ListTile(
           onTap: () {
-            Provider.of<BottomNavigationProvider>(context, listen: false).changeIndex(0);
-            Provider.of<UserProvider>(context, listen: false).logout();
-            Get.offAll(() => const GetStarted());
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: grey,
+                    content: Text(
+                      "Are you sure, want to log out?",
+                      style: TextStyle(
+                        color: white,
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: white,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(backgroundColor: grey2),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Provider.of<BottomNavigationProvider>(context,
+                                  listen: false)
+                              .changeIndex(0);
+                          Provider.of<UserProvider>(context, listen: false)
+                              .logout();
+                          Get.offAll(() => const GetStarted());
+                        },
+                        child: Text(
+                          "Logout",
+                          style: TextStyle(
+                            color: white,
+                          ),
+                        ),
+                        style:
+                            TextButton.styleFrom(backgroundColor: primaryColor),
+                      ),
+                    ],
+                  );
+                });
           },
           leading: Icon(FeatherIcons.logOut, color: white),
           trailing: Icon(FeatherIcons.chevronRight, color: white),
