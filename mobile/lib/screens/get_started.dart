@@ -6,6 +6,7 @@ import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netflixclone/widgets/large_button.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -18,36 +19,65 @@ class _GetStartedState extends State<GetStarted> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: Image.network(
-              "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/posters_bg.png",
-            ).image,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-          ),
-        ),
+      body: SizedBox(
         width: width,
         height: height,
         child: Stack(
           children: [
+            CarouselSlider(
+              options: CarouselOptions(
+                height: height,
+                viewportFraction: 1.0,
+                enlargeCenterPage: false,
+                autoPlay: true,
+                reverse: true,
+              ),
+              items: [
+                "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/fliq.png",
+                "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/posters_bg.png"
+              ]
+                  .map((item) => Container(
+                        child: Center(
+                            child: Image.network(
+                          item,
+                          fit: BoxFit.cover,
+                          height: height,
+                          width: width,
+                        )),
+                      ))
+                  .toList(),
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                    width: width,
-                    height: height * 0.4,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [black, transparent],
+                Stack(
+                  children: [
+                    Container(
+                      width: width,
+                      height: height * 0.3,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [black, transparent],
+                        ),
                       ),
-                    )),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: height * 0.2,
+                      child: Center(
+                        child: Image.asset(
+                          "assets/images/textLogo.png",
+                          width: width * 0.5,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 Container(
                     width: width,
-                    height: height * 0.4,
+                    height: height * 0.6,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -60,8 +90,22 @@ class _GetStartedState extends State<GetStarted> {
             Padding(
               padding: EdgeInsets.all(width * 0.04),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Text(
+                    "ENDLESS\nENTERTAINMENT\nALL IN ONE PLACE.",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: white,
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w900,
+                        height: 1.2,
+                        letterSpacing: 1),
+                  ),
+                  SizedBox(
+                    height: height * 0.03,
+                  ),
                   LargeButton(
                     onTap: () {
                       Get.to(() => const SignUp());
