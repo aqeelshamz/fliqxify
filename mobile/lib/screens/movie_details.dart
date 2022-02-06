@@ -172,9 +172,11 @@ class _MovieDetailsState extends State<MovieDetails>
                         ],
                       ),
                       SizedBox(height: height * 0.03),
-                      LargeButton(onTap: () {
-                        Get.to(()=> const MovieVideoPlayer());
-                      }, label: "PLAY"),
+                      LargeButton(
+                          onTap: () {
+                            Get.to(() => const MovieVideoPlayer());
+                          },
+                          label: "PLAY"),
                       SizedBox(height: height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -474,7 +476,7 @@ class _MovieDetailsState extends State<MovieDetails>
             padding: EdgeInsets.all(width * 0.025),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Row(
@@ -494,7 +496,7 @@ class _MovieDetailsState extends State<MovieDetails>
                               reviews[i]["username"],
                               style: TextStyle(
                                 color: white,
-                                fontSize: 10.sp,
+                                fontSize: 11.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -502,7 +504,7 @@ class _MovieDetailsState extends State<MovieDetails>
                               reviews[i]["review"],
                               style: TextStyle(
                                 color: white,
-                                fontSize: 12.sp,
+                                fontSize: 13.sp,
                               ),
                             ),
                           ],
@@ -519,7 +521,7 @@ class _MovieDetailsState extends State<MovieDetails>
                         child: Icon(
                           FeatherIcons.trash,
                           color: white,
-                          size: 14.sp,
+                          size: 18.sp,
                         ),
                       )
                     : Column(
@@ -529,25 +531,30 @@ class _MovieDetailsState extends State<MovieDetails>
                             onTap: () {
                               likeReview(reviews[i]["_id"]);
                             },
-                            child: Icon(
-                              reviews[i]["likes"].contains(
-                                      Provider.of<UserProvider>(context).email)
-                                  ? Icons.favorite
-                                  : FeatherIcons.heart,
-                              color: reviews[i]["likes"].contains(
-                                      Provider.of<UserProvider>(context).email)
-                                  ? errorRed
-                                  : white,
-                              size: 14.sp,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            reviews[i]["likes"].length.toString(),
-                            style: TextStyle(
-                              color: white.withOpacity(0.8),
-                              fontSize: 8.sp,
-                              fontWeight: FontWeight.bold,
+                            child: Column(
+                              children: [
+                                Icon(
+                                  reviews[i]["likes"].contains(
+                                          Provider.of<UserProvider>(context)
+                                              .email)
+                                      ? Icons.favorite
+                                      : FeatherIcons.heart,
+                                  color: reviews[i]["likes"].contains(
+                                          Provider.of<UserProvider>(context)
+                                              .email)
+                                      ? errorRed
+                                      : white,
+                                  size: 16.sp,
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  reviews[i]["likes"].length.toString(),
+                                  style: TextStyle(
+                                    color: white.withOpacity(0.8),
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
