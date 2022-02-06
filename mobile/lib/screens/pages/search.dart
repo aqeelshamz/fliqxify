@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
+import 'package:netflixclone/screens/pages/search/search_results.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,11 @@ class Search extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(
+        TextFormField(
+          textInputAction: TextInputAction.search,
+          onFieldSubmitted: (text) {
+            Get.to(() => SearchResults(text));
+          },
           obscureText: false,
           decoration: InputDecoration(
             fillColor: grey1,
@@ -64,7 +69,12 @@ class Search extends StatelessWidget {
 
   getWidgets() {
     List<Widget> widgets = [];
-    for (int i = 0; i < Provider.of<MoviesProvider>(Get.context!, listen: false).categories.length; i++) {
+    for (int i = 0;
+        i <
+            Provider.of<MoviesProvider>(Get.context!, listen: false)
+                .categories
+                .length;
+        i++) {
       widgets.add(Column(
         children: [
           Expanded(
@@ -74,7 +84,8 @@ class Search extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadius * 2),
                 image: DecorationImage(
                     image: Image.network(
-                      Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["image"],
+                      Provider.of<MoviesProvider>(Get.context!, listen: false)
+                          .categories[i]["image"],
                     ).image,
                     fit: BoxFit.cover),
               ),
@@ -82,7 +93,8 @@ class Search extends StatelessWidget {
           ),
           SizedBox(height: height * 0.01),
           Text(
-            Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["name"],
+            Provider.of<MoviesProvider>(Get.context!, listen: false)
+                .categories[i]["name"],
             style: TextStyle(
               color: white,
               fontSize: 12.sp,
