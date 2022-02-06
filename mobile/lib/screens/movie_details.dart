@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
+import 'package:netflixclone/screens/movie_video_player.dart';
 import 'package:netflixclone/screens/youtube_player.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
@@ -171,7 +172,9 @@ class _MovieDetailsState extends State<MovieDetails>
                         ],
                       ),
                       SizedBox(height: height * 0.03),
-                      LargeButton(onTap: () {}, label: "PLAY"),
+                      LargeButton(onTap: () {
+                        Get.to(()=> const MovieVideoPlayer());
+                      }, label: "PLAY"),
                       SizedBox(height: height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

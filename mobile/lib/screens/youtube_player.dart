@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:netflixclone/utils/colors.dart';
-import 'package:netflixclone/utils/size.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YouTubePlayerScreen extends StatefulWidget {
@@ -22,34 +22,38 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
   Widget build(BuildContext context) {
     YoutubePlayerController _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(widget.trailerUrl)!,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
+      flags:
+          const YoutubePlayerFlags(autoPlay: true, mute: false, forceHD: true),
     );
 
-    return Scaffold(
-        body: Container(
-      width: width,
-      height: height,
-      color: black,
-      child: SafeArea(
-        child: YoutubePlayer(
-          controller: _controller,
-          showVideoProgressIndicator: true,
-          progressIndicatorColor: Colors.amber,
-          progressColors: ProgressBarColors(
-            playedColor: primaryColor,
-            handleColor: primaryColor,
-          ),
-          bottomActions: [
-            CurrentPosition(),
-            ProgressBar(isExpanded: true),
-            RemainingDuration(),
-            FullScreenButton()
-          ],
-        ),
-      ),
-    ));
+    return WillPopScope(
+      onWillPop: () async {
+        if (_controller.value.isFullScreen) {
+          _controller.toggleFullScreenMode();
+          return false;
+        }
+
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black,
+          body: Center(
+            child: YoutubePlayer(
+              controller: _controller,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.amber,
+              progressColors: ProgressBarColors(
+                playedColor: primaryColor,
+                handleColor: primaryColor,
+              ),
+              bottomActions: [
+                CurrentPosition(),
+                ProgressBar(isExpanded: true),
+                RemainingDuration(),
+                FullScreenButton()
+              ],
+            ),
+          )),
+    );
   }
 }

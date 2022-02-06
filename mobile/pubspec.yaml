@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.2
+  flick_video_player: ^0.3.0
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
@@ -38,9 +39,8 @@ dependencies:
   http: ^0.13.4
   like_button: ^2.0.3
   lottie: ^1.2.1
-  provider: ^6.0.1
+  provider: ^5.0.0
   shared_preferences: ^2.0.12
-  video_player: ^2.2.5
   youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
