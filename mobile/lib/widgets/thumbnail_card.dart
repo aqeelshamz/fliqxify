@@ -33,7 +33,9 @@ class ThumbnailCard extends StatelessWidget {
           color: primaryColor.withOpacity(0.4),
           borderRadius: BorderRadius.circular(borderRadius * 2),
           image: DecorationImage(
-              image: Image.network(imageUrl).image, fit: BoxFit.cover),
+            image: Image.network(imageUrl).image,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

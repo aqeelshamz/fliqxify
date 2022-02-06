@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
@@ -29,8 +30,42 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Center(
-        child: Image.asset("assets/images/textLogo.png", width: width * 0.4),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Opacity(
+            opacity: 0,
+            child: IgnorePointer(
+              ignoring: true,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  FeatherIcons.bell,
+                ),
+              ),
+            ),
+          ),
+          Image.asset("assets/images/textLogo.png", width: width * 0.4),
+          IconButton(
+            onPressed: () {},
+            icon: Stack(children: [
+              Icon(
+                FeatherIcons.bell,
+                color: white,
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  width: width * 0.025,
+                  height: width * 0.025,
+                  decoration: BoxDecoration(
+                      color: primaryColor, shape: BoxShape.circle),
+                ),
+              ),
+            ]),
+          ),
+        ],
       ),
       SizedBox(height: height * 0.02),
       Expanded(
@@ -52,72 +87,90 @@ class _HomePageState extends State<HomePage> {
                 fontSize: 14.sp,
               ),
             ),
-            SizedBox(height: height * 0.02),
-            Text(
-              "Popular",
-              style: TextStyle(
-                color: white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: height * 0.02),
-            SizedBox(
-              height: height * 0.2,
-              child: _loadingPopular
-                  ? Container(
-                      margin: EdgeInsets.only(right: width * 0.025),
-                      height: height * 0.2,
-                      child: const Center(child: CircularProgressIndicator()))
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return ThumbnailCard(
-                            movieId: Provider.of<MoviesProvider>(context)
-                                .popular[index]["id"]
-                                .toString(),
-                            heroId: "${index}mylist",
-                            imageUrl: "https://image.tmdb.org/t/p/w200" +
-                                Provider.of<MoviesProvider>(context)
-                                    .popular[index]["poster_path"]);
-                      },
-                    ),
+            SizedBox(height: height * 0.04),
+            Row(
+              children: [
+                Icon(FeatherIcons.user, color: primaryColor),
+                SizedBox(width: width * 0.02),
+                Text(
+                  "Popular",
+                  style: TextStyle(
+                    color: white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: height * 0.04),
-            Text(
-              "Top Rated",
-              style: TextStyle(
-                color: white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
+            _loadingPopular
+                ? Container(
+                    margin: EdgeInsets.only(right: width * 0.025),
+                    height: height * 0.2,
+                    child: const Center(child: CircularProgressIndicator()))
+                : GridView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 8 / 11,
+                        mainAxisSpacing: height * 0.015),
+                    scrollDirection: Axis.vertical,
+                    itemCount:
+                        Provider.of<MoviesProvider>(context).popular.length,
+                    itemBuilder: (context, index) {
+                      return ThumbnailCard(
+                          movieId: Provider.of<MoviesProvider>(context)
+                              .popular[index]["id"]
+                              .toString(),
+                          heroId: "${index}mylist",
+                          imageUrl: "https://image.tmdb.org/t/p/w200" +
+                              Provider.of<MoviesProvider>(context)
+                                  .popular[index]["poster_path"]);
+                    },
+                  ),
+            SizedBox(height: height * 0.04),
+            Row(
+              children: [
+                Icon(FeatherIcons.star, color: primaryColor),
+                SizedBox(width: width * 0.02),
+                Text(
+                  "Top Rated",
+                  style: TextStyle(
+                    color: white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: height * 0.02),
-            SizedBox(
-              height: height * 0.2,
-              child: _loadingTopRated
-                  ? Container(
-                      margin: EdgeInsets.only(right: width * 0.025),
-                      height: height * 0.2,
-                      child: const Center(child: CircularProgressIndicator()))
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return ThumbnailCard(
-                            movieId: Provider.of<MoviesProvider>(context)
-                                .topRated[index]["id"]
-                                .toString(),
-                            heroId: "${index}tr",
-                            imageUrl: "https://image.tmdb.org/t/p/w200" +
-                                Provider.of<MoviesProvider>(context)
-                                    .topRated[index]["poster_path"]);
-                      },
-                    ),
-            ),
+            SizedBox(height: height * 0.04),
+            _loadingTopRated
+                ? Container(
+                    margin: EdgeInsets.only(right: width * 0.025),
+                    height: height * 0.2,
+                    child: const Center(child: CircularProgressIndicator()))
+                : GridView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 8 / 11,
+                        mainAxisSpacing: height * 0.015),
+                    scrollDirection: Axis.vertical,
+                    itemCount:
+                        Provider.of<MoviesProvider>(context).topRated.length,
+                    itemBuilder: (context, index) {
+                      return ThumbnailCard(
+                          movieId: Provider.of<MoviesProvider>(context)
+                              .topRated[index]["id"]
+                              .toString(),
+                          heroId: "${index}mylist",
+                          imageUrl: "https://image.tmdb.org/t/p/w200" +
+                              Provider.of<MoviesProvider>(context)
+                                  .topRated[index]["poster_path"]);
+                    },
+                  ),
             SizedBox(height: height * 0.02),
           ],
         ),
