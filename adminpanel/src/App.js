@@ -61,9 +61,9 @@ function App() {
 
     axios(config)
       .then((response) => {
-        console.log("Movie uploaded");
+        alert("Movie uploaded");
       })
-      .catch((err) => console.log("Something went wrong"));
+      .catch((err) => alert("Something went wrong"));
   };
 
   return (
