@@ -62,15 +62,19 @@ function App() {
     axios(config)
       .then((response) => {
         alert("Movie uploaded");
+        window.location.reload();
       })
-      .catch((err) => alert("Something went wrong"));
+      .catch((err) => {
+        alert("Something went wrong");
+        window.location.reload();
+      });
   };
 
   return (
     <div className="App">
       <h1>Fliqxify Admin Panel</h1>
       <h2>Upload Movie</h2>
-      <br />  
+      <br />
       <p>Enter Movie ID:</p>
       <input
         type="text"
@@ -78,7 +82,9 @@ function App() {
         onChange={(e) => {
           setMovieId(e.target.value);
         }}
-      /><br/><br/>
+      />
+      <br />
+      <br />
       <p>Select Movie File to Start Upload:</p>
       <input type="file" onChange={uploadMovie} />
       <br />
