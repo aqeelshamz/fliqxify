@@ -130,8 +130,8 @@ router.post("/like", validate, async (req, res) => {
   }
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+const videoStorage = multer.diskStorage({
+  estination: function (req, file, cb) {
     cb(null, "public");
   },
   filename: (req, file, cb) => {
@@ -139,9 +139,20 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage }).single("file");
+// const upload = multer({ storage: storage }).single("file");
 
-router.post("/upload", async (req, res) => {
+const videoUpload = multer({
+  storage: videoStorage,
+  fileFilter(req, file, cb) {
+    // upload only mp4 and mkv format
+    if (!file.originalname.match(/\.(mp4|MPEG-4|mkv)$/)) {
+      return cb(new Error("Please upload a video"));
+    }
+    cb(undefined, true);
+  },
+});
+
+router.post("/upload", videoUpload.single('file'), async (req, res) => {
   try {
     upload(req, res, async (err) => {
       if (err) {
@@ -149,7 +160,7 @@ router.post("/upload", async (req, res) => {
         return res.sendStatus(500);
       }
 
-      const movieExist = await Movie.findOne({movieId: req.body.movieId});
+      const movieExist = await Movie.findOne({ movieId: req.body.movieId });
       if (movieExist) {
         await Movie.findOneAndUpdate(
           { movieId: req.body.movieId },
