@@ -738,8 +738,6 @@ class _MovieDetailsState extends State<MovieDetails>
       body: jsonEncode(body),
     );
 
-    print("LINK:"  + jsonDecode(response.body)["videoLink"]);
-
     setState(() {
       _videoLink = jsonDecode(response.body)["videoLink"];
     });

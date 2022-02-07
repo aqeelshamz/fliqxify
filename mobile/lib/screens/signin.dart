@@ -184,6 +184,7 @@ class _SignInState extends State<SignIn> {
       var data = jsonDecode(response.body);
       Provider.of<UserProvider>(context, listen: false).changeName(data["name"]);
       Provider.of<UserProvider>(context, listen: false).changeEmail(data["email"]);
+      Provider.of<UserProvider>(context, listen: false).changeToken(data["token"]);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("name", data["name"]);
       prefs.setString("email", data["email"]);
