@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
+import 'package:netflixclone/widgets/thumbnail_card.dart';
 import 'package:provider/provider.dart';
+
+bool _searchingMovie = false;
 
 class SearchResults extends StatefulWidget {
   final String keyword;
@@ -16,6 +19,12 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
+  @override
+  void initState() {
+    super.initState();
+    searchMovie();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +82,54 @@ class _SearchResultsState extends State<SearchResults> {
                         fontStyle: FontStyle.italic),
                   ),
                   SizedBox(height: height * 0.04),
-                  const Center(child: CircularProgressIndicator())
+                  _searchingMovie
+                      ? const Center(child: CircularProgressIndicator())
+                      : Provider.of<MoviesProvider>(context)
+                              .searchResult
+                              .isEmpty
+                          ? Column(children: [
+                              SizedBox(height: height * 0.1),
+                              Icon(
+                                FeatherIcons.xCircle,
+                                color: grey2,
+                                size: width * 0.25,
+                              ),
+                              SizedBox(height: height * 0.02),
+                              Text(
+                                "No results found.",
+                                style: TextStyle(
+                                  color: grey2,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ])
+                          : GridView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 8 / 11,
+                                      mainAxisSpacing: height * 0.015),
+                              scrollDirection: Axis.vertical,
+                              itemCount: Provider.of<MoviesProvider>(context)
+                                  .searchResult
+                                  .length,
+                              itemBuilder: (context, index) {
+                                return ThumbnailCard(
+                                    movieId:
+                                        Provider.of<MoviesProvider>(context)
+                                            .searchResult[index]["id"]
+                                            .toString(),
+                                    heroId: "${index}mylist",
+                                    imageUrl:
+                                        "https://image.tmdb.org/t/p/w200" +
+                                            Provider.of<MoviesProvider>(context)
+                                                    .searchResult[index]
+                                                ["poster_path"]);
+                              },
+                            ),
                 ],
               )),
             ],
@@ -121,5 +177,18 @@ class _SearchResultsState extends State<SearchResults> {
       ));
     }
     return widgets;
+  }
+
+  void searchMovie() async {
+    setState(() {
+      _searchingMovie = true;
+    });
+
+    await Provider.of<MoviesProvider>(context, listen: false)
+        .searchMovie(widget.keyword);
+
+    setState(() {
+      _searchingMovie = false;
+    });
   }
 }

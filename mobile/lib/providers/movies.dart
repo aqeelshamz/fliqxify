@@ -86,6 +86,8 @@ class MoviesProvider extends ChangeNotifier {
   List categoryMovies = [];
   Map movieDetails = {};
 
+  bool searchingMovie = false;
+
   getPopular() async {
     var response = await http.get(Uri.parse(
         "$tmdbUrl/movie/popular" + tmdbApiKey + "&language=en-US&page=1"));
@@ -99,11 +101,11 @@ class MoviesProvider extends ChangeNotifier {
   }
 
   searchMovie(String keyword) async {
-    var response = await http.get(Uri.parse("$tmdbUrl/movie/popular" +
+    var response = await http.get(Uri.parse("$tmdbUrl/search/movie" +
         tmdbApiKey +
         "&language=en-US&page=1&query=" +
         keyword));
-    searchResult = jsonDecode(response.body);
+    searchResult = jsonDecode(response.body)["results"];
   }
 
   getMoviesByCategory(int categoryId) async {

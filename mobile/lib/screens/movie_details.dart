@@ -39,11 +39,13 @@ class MovieDetails extends StatefulWidget {
   final String movieId;
   final String posterImage;
   final String heroId;
+  final bool isUpcoming;
   const MovieDetails(
       {Key? key,
       required this.movieId,
       required this.heroId,
-      required this.posterImage})
+      required this.posterImage,
+      this.isUpcoming = false})
       : super(key: key);
 
   @override
@@ -176,7 +178,8 @@ class _MovieDetailsState extends State<MovieDetails>
                           onTap: () {
                             Get.to(() => const MovieVideoPlayer());
                           },
-                          label: "PLAY"),
+                          label: "PLAY",
+                          icon: FeatherIcons.play),
                       SizedBox(height: height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

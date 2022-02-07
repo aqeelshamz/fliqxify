@@ -69,110 +69,115 @@ class _HomePageState extends State<HomePage> {
       ),
       SizedBox(height: height * 0.02),
       Expanded(
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            Text(
-              "Hi " + Provider.of<UserProvider>(context).name + " 👋",
-              style: TextStyle(
-                color: white,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "Welcome to Fliqxify.",
-              style: TextStyle(
-                color: white.withOpacity(0.6),
-                fontSize: 14.sp,
-              ),
-            ),
-            SizedBox(height: height * 0.04),
-            Row(
-              children: [
-                Icon(FeatherIcons.user, color: primaryColor),
-                SizedBox(width: width * 0.02),
-                Text(
-                  "Popular",
-                  style: TextStyle(
-                    color: white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+        child: RefreshIndicator(
+          onRefresh: ()async{
+            getData();
+          },
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              Text(
+                "Hi " + Provider.of<UserProvider>(context).name + " 👋",
+                style: TextStyle(
+                  color: white,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            SizedBox(height: height * 0.04),
-            _loadingPopular
-                ? Container(
-                    margin: EdgeInsets.only(right: width * 0.025),
-                    height: height * 0.2,
-                    child: const Center(child: CircularProgressIndicator()))
-                : GridView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 8 / 11,
-                        mainAxisSpacing: height * 0.015),
-                    scrollDirection: Axis.vertical,
-                    itemCount:
-                        Provider.of<MoviesProvider>(context).popular.length,
-                    itemBuilder: (context, index) {
-                      return ThumbnailCard(
-                          movieId: Provider.of<MoviesProvider>(context)
-                              .popular[index]["id"]
-                              .toString(),
-                          heroId: "${index}mylist",
-                          imageUrl: "https://image.tmdb.org/t/p/w200" +
-                              Provider.of<MoviesProvider>(context)
-                                  .popular[index]["poster_path"]);
-                    },
-                  ),
-            SizedBox(height: height * 0.04),
-            Row(
-              children: [
-                Icon(FeatherIcons.star, color: primaryColor),
-                SizedBox(width: width * 0.02),
-                Text(
-                  "Top Rated",
-                  style: TextStyle(
-                    color: white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              Text(
+                "Welcome to Fliqxify.",
+                style: TextStyle(
+                  color: white.withOpacity(0.6),
+                  fontSize: 14.sp,
                 ),
-              ],
-            ),
-            SizedBox(height: height * 0.04),
-            _loadingTopRated
-                ? Container(
-                    margin: EdgeInsets.only(right: width * 0.025),
-                    height: height * 0.2,
-                    child: const Center(child: CircularProgressIndicator()))
-                : GridView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 8 / 11,
-                        mainAxisSpacing: height * 0.015),
-                    scrollDirection: Axis.vertical,
-                    itemCount:
-                        Provider.of<MoviesProvider>(context).topRated.length,
-                    itemBuilder: (context, index) {
-                      return ThumbnailCard(
-                          movieId: Provider.of<MoviesProvider>(context)
-                              .topRated[index]["id"]
-                              .toString(),
-                          heroId: "${index}mylist",
-                          imageUrl: "https://image.tmdb.org/t/p/w200" +
-                              Provider.of<MoviesProvider>(context)
-                                  .topRated[index]["poster_path"]);
-                    },
+              ),
+              SizedBox(height: height * 0.04),
+              Row(
+                children: [
+                  Icon(FeatherIcons.users, color: primaryColor),
+                  SizedBox(width: width * 0.02),
+                  Text(
+                    "Popular",
+                    style: TextStyle(
+                      color: white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-            SizedBox(height: height * 0.02),
-          ],
+                ],
+              ),
+              SizedBox(height: height * 0.04),
+              _loadingPopular
+                  ? Container(
+                      margin: EdgeInsets.only(right: width * 0.025),
+                      height: height * 0.2,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : GridView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 8 / 11,
+                          mainAxisSpacing: height * 0.015),
+                      scrollDirection: Axis.vertical,
+                      itemCount:
+                          Provider.of<MoviesProvider>(context).popular.length,
+                      itemBuilder: (context, index) {
+                        return ThumbnailCard(
+                            movieId: Provider.of<MoviesProvider>(context)
+                                .popular[index]["id"]
+                                .toString(),
+                            heroId: "${index}mylist",
+                            imageUrl: "https://image.tmdb.org/t/p/w200" +
+                                Provider.of<MoviesProvider>(context)
+                                    .popular[index]["poster_path"]);
+                      },
+                    ),
+              SizedBox(height: height * 0.04),
+              Row(
+                children: [
+                  Icon(FeatherIcons.star, color: primaryColor),
+                  SizedBox(width: width * 0.02),
+                  Text(
+                    "Top Rated",
+                    style: TextStyle(
+                      color: white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: height * 0.04),
+              _loadingTopRated
+                  ? Container(
+                      margin: EdgeInsets.only(right: width * 0.025),
+                      height: height * 0.2,
+                      child: const Center(child: CircularProgressIndicator()))
+                  : GridView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 8 / 11,
+                          mainAxisSpacing: height * 0.015),
+                      scrollDirection: Axis.vertical,
+                      itemCount:
+                          Provider.of<MoviesProvider>(context).topRated.length,
+                      itemBuilder: (context, index) {
+                        return ThumbnailCard(
+                            movieId: Provider.of<MoviesProvider>(context)
+                                .topRated[index]["id"]
+                                .toString(),
+                            heroId: "${index}mylist",
+                            imageUrl: "https://image.tmdb.org/t/p/w200" +
+                                Provider.of<MoviesProvider>(context)
+                                    .topRated[index]["poster_path"]);
+                      },
+                    ),
+              SizedBox(height: height * 0.02),
+            ],
+          ),
         ),
       ),
     ]);

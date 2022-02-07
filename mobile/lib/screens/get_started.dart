@@ -30,7 +30,6 @@ class _GetStartedState extends State<GetStarted> {
                 viewportFraction: 1.0,
                 enlargeCenterPage: false,
                 autoPlay: true,
-                reverse: true,
               ),
               items: [
                 "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/fliq.png",
