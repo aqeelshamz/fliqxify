@@ -131,7 +131,7 @@ router.post("/like", validate, async (req, res) => {
 });
 
 const videoStorage = multer.diskStorage({
-  estination: function (req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, "public");
   },
   filename: (req, file, cb) => {
@@ -154,12 +154,6 @@ const videoUpload = multer({
 
 router.post("/upload", videoUpload.single('file'), async (req, res) => {
   try {
-    upload(req, res, async (err) => {
-      if (err) {
-        console.log(err);
-        return res.sendStatus(500);
-      }
-
       const movieExist = await Movie.findOne({ movieId: req.body.movieId });
       if (movieExist) {
         await Movie.findOneAndUpdate(
@@ -177,7 +171,6 @@ router.post("/upload", videoUpload.single('file'), async (req, res) => {
       }
 
       res.send(req.file);
-    });
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

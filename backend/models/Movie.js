@@ -6,10 +6,6 @@ const movieSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    scheduleDate: {
-      type: Date,
-      required: true,
-    },
     movieFile: {
       type: String,
       required: true,
