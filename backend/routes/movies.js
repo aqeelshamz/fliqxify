@@ -185,6 +185,9 @@ router.post("/video", validate, (req, res)=>{
   try{
     const data = await schema.validateAsync(req.body);
     const movie = await Movie.findOne({movieId: data.movieId});
+    if(!movie){
+      return res.send({videoLink: ""});
+    }
     return res.send({videoLink: "http://fliqxify-backend.aqeelshamz.com/" + movie.movieFile})
   } 
   catch(err){
