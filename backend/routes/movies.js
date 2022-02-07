@@ -177,7 +177,7 @@ router.post("/upload", videoUpload.single('file'), async (req, res) => {
   }
 });
 
-router.post("/video", validate, (req, res)=>{
+router.post("/video", validate, async (req, res)=>{
   const schema = joi.object({
     movieId: joi.string().required()
   });
