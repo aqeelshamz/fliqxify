@@ -4,11 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/bottom_navigation.dart';
 import 'package:netflixclone/providers/user.dart';
+import 'package:netflixclone/screens/change_password.dart';
 import 'package:netflixclone/screens/get_started.dart';
 import 'package:netflixclone/screens/settings.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+
+bool _editUsername = false;
+String _newUsername = "";
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -19,9 +24,15 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    TextEditingController? _usernameController;
+
+    return ListView(
       children: [
         Text(
           "Profile",
@@ -71,16 +82,37 @@ class _ProfileState extends State<Profile> {
         ListTile(
           leading: Icon(FeatherIcons.user, color: white),
           trailing: IconButton(
-            icon: Icon(FeatherIcons.edit2, color: white),
-            onPressed: () {},
+            icon: Icon(_editUsername ? FeatherIcons.check : FeatherIcons.edit2,
+                color: white),
+            onPressed: () {
+              setState(() {
+                _usernameController?.text =
+                    Provider.of<UserProvider>(context, listen: false).name;
+                _editUsername = !_editUsername;
+              });
+            },
           ),
-          title: Text(
-            Provider.of<UserProvider>(context).name,
-            style: TextStyle(
-              color: white,
-              fontSize: 15.sp,
-            ),
-          ),
+          title: _editUsername
+              ? TextField(
+                  controller: _usernameController,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: "Username",
+                    hintStyle: TextStyle(color: grey2),
+                  ),
+                  onChanged: (txt) {
+                    setState(() {
+                      _newUsername = txt;
+                    });
+                  },
+                )
+              : Text(
+                  Provider.of<UserProvider>(context).name,
+                  style: TextStyle(
+                    color: white,
+                    fontSize: 15.sp,
+                  ),
+                ),
         ),
         SizedBox(
           height: height * 0.02,
@@ -114,7 +146,9 @@ class _ProfileState extends State<Profile> {
           height: height * 0.02,
         ),
         ListTile(
-          onTap: () {},
+          onTap: () {
+            Get.to(() => const ChangePassword());
+          },
           leading: Icon(FeatherIcons.lock, color: white),
           trailing: Icon(FeatherIcons.chevronRight, color: white),
           title: Text(
@@ -205,5 +239,9 @@ class _ProfileState extends State<Profile> {
         ),
       ],
     );
+  }
+
+  void changeUsername() async {
+    var response = await http.post(Uri.parse(""));
   }
 }

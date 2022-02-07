@@ -3,11 +3,9 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
-import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/thumbnail_card.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 bool _loadingPopular = true;
