@@ -7,6 +7,8 @@ function App() {
     getPopularMovies();
   }, []);
 
+  const [uploading, setUploading] = useState(false);
+
   const [movies, setMovies] = useState([]);
   const [movieId, setMovieId] = useState("");
 
@@ -48,7 +50,7 @@ function App() {
       window.location.reload();
       return;
     }
-
+setUploading(true);
     const data = new FormData();
     data.append("file", e.target.files[0]);
     data.append("movieId", movieId);
@@ -67,6 +69,7 @@ function App() {
       .catch((err) => {
         alert("Something went wrong");
         window.location.reload();
+
       });
   };
 
@@ -75,6 +78,7 @@ function App() {
       <h1>Fliqxify Admin Panel</h1>
       <h2>Upload Movie</h2>
       <br />
+      {uploading ? <p style={{fontSize: "1rem" , fontWeight: "500", color: "dodgerblue"}}>Uploading movie.. Please wait..</p> : <>
       <p>Enter Movie ID:</p>
       <input
         type="text"
@@ -87,6 +91,7 @@ function App() {
       <br />
       <p>Select Movie File to Start Upload:</p>
       <input type="file" onChange={uploadMovie} />
+      </>}
       <br />
       <br />
       <br />
