@@ -70,7 +70,7 @@ class MoviesProvider extends ChangeNotifier {
     },
     {
       "id": 878,
-      "name": "Science Fiction",
+      "name": "Sci-Fi",
       "image":
           "https://www.themoviedb.org/t/p/w220_and_h330_face/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
     },
@@ -113,7 +113,7 @@ class MoviesProvider extends ChangeNotifier {
         tmdbApiKey +
         "&language=en-US&page=1&with_genres=" +
         categoryId.toString()));
-    categoryMovies = jsonDecode(response.body);
+    categoryMovies = jsonDecode(response.body)["results"];
   }
 
   getMovieDetails(String movieId) async {

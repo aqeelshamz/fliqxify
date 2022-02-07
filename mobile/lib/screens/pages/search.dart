@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
+import 'package:netflixclone/screens/category_page.dart';
 import 'package:netflixclone/screens/pages/search/search_results.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
@@ -75,33 +76,38 @@ class Search extends StatelessWidget {
                 .categories
                 .length;
         i++) {
-      widgets.add(Column(
-        children: [
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(right: width * 0.025),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius * 2),
-                image: DecorationImage(
-                    image: Image.network(
-                      Provider.of<MoviesProvider>(Get.context!, listen: false)
-                          .categories[i]["image"],
-                    ).image,
-                    fit: BoxFit.cover),
+      widgets.add(InkWell(
+        onTap: (){
+          Get.to(()=> CategoryPage(Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["name"], Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["id"]));
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(right: width * 0.025),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(borderRadius * 2),
+                  image: DecorationImage(
+                      image: Image.network(
+                        Provider.of<MoviesProvider>(Get.context!, listen: false)
+                            .categories[i]["image"],
+                      ).image,
+                      fit: BoxFit.cover),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: height * 0.01),
-          Text(
-            Provider.of<MoviesProvider>(Get.context!, listen: false)
-                .categories[i]["name"],
-            style: TextStyle(
-              color: white,
-              fontSize: 12.sp,
+            SizedBox(height: height * 0.01),
+            Text(
+              Provider.of<MoviesProvider>(Get.context!, listen: false)
+                  .categories[i]["name"],
+              style: TextStyle(
+                color: white,
+                fontSize: 12.sp,
+              ),
             ),
-          ),
-          SizedBox(height: height * 0.03),
-        ],
+            SizedBox(height: height * 0.03),
+          ],
+        ),
       ));
     }
     return widgets;
