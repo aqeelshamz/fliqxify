@@ -144,6 +144,7 @@ const upload = multer({ storage: storage }).single("file");
 router.post("/upload", validate, async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
+      console.log(err)
       return res.sendStatus(500);
     }
 
