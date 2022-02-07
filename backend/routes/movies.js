@@ -23,7 +23,6 @@ router.post("/trailer", async (req, res) => {
     };
     axios(config)
       .then((response) => {
-        console.log(response.data);
         let videos = response.data.results;
         let trailerUrl = "";
         let thumbnail = "";
@@ -37,10 +36,11 @@ router.post("/trailer", async (req, res) => {
         return res.json({ url: trailerUrl, thumbnail: thumbnail });
       })
       .catch((err) => {
+        console.log(err);
         return res.status(500).send("Something went wrong");
       });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 });
@@ -153,48 +153,49 @@ const videoUpload = multer({
   },
 });
 
-router.post("/upload", videoUpload.single('file'), async (req, res) => {
+router.post("/upload", videoUpload.single("file"), async (req, res) => {
   try {
-      const movieExist = await Movie.findOne({ movieId: req.body.movieId });
-      if (movieExist) {
-        await Movie.findOneAndUpdate(
-          { movieId: req.body.movieId },
-          {
-            movieFile: req.file.filename,
-          }
-        );
-      } else {
-        const newMovie = new Movie({
-          movieId: req.body.movieId,
+    const movieExist = await Movie.findOne({ movieId: req.body.movieId });
+    if (movieExist) {
+      await Movie.findOneAndUpdate(
+        { movieId: req.body.movieId },
+        {
           movieFile: req.file.filename,
-        });
-        await newMovie.save();
-      }
+        }
+      );
+    } else {
+      const newMovie = new Movie({
+        movieId: req.body.movieId,
+        movieFile: req.file.filename,
+      });
+      await newMovie.save();
+    }
 
-      res.send(req.file);
+    res.send(req.file);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
   }
 });
 
-router.post("/video", validate, async (req, res)=>{
+router.post("/video", validate, async (req, res) => {
   const schema = joi.object({
-    movieId: joi.string().required()
+    movieId: joi.string().required(),
   });
 
-  try{
+  try {
     const data = await schema.validateAsync(req.body);
-    const movie = await Movie.findOne({movieId: data.movieId});
-    if(!movie){
-      return res.send({videoLink: ""});
+    const movie = await Movie.findOne({ movieId: data.movieId });
+    if (!movie) {
+      return res.send({ videoLink: "" });
     }
-    return res.send({videoLink: "http://fliqxify-backend.aqeelshamz.com/" + movie.movieFile})
-  } 
-  catch(err){
-    console.log(err)
+    return res.send({
+      videoLink: "http://fliqxify-backend.aqeelshamz.com/" + movie.movieFile,
+    });
+  } catch (err) {
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
-})
+});
 
 module.exports = router;
