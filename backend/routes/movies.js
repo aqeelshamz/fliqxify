@@ -6,6 +6,8 @@ const Review = require("../models/Review");
 const User = require("../models/User");
 const { validate } = require("../middlewares/validate");
 const Del = require("../models/Del");
+const multer = require("multer");
+const Movie = require("../models/Movie");
 
 router.post("/trailer", async (req, res) => {
   const schema = joi.object({
@@ -127,5 +129,37 @@ router.post("/like", validate, async (req, res) => {
     return res.status(500).send("Something went wrong");
   }
 });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage }).single("file");
+
+router.post("/upload", validate, async (req, res)=>{
+  const schema = joi.object({
+    movieId: joi.string().required(),
+  });
+
+  try{
+    const data = await schema.validateAsync(req.body);
+    upload(req, res, async (err)=>{
+      if(err){
+        return res.sendStatus(500);
+      }
+
+      await Movie.findByIdAndUpdate(data.movieId, {movieFile: req.file.filename});
+      res.send(req.file);
+    });
+  }
+  catch(err){
+    return res.status(500).send("Something went wrong");
+  }
+})
 
 module.exports = router;
