@@ -177,4 +177,19 @@ router.post("/upload", videoUpload.single('file'), async (req, res) => {
   }
 });
 
+router.post("/video", validate, (req, res)=>{
+  const schema = joi.object({
+    movieId: joi.string().required()
+  });
+
+  try{
+    const data = await schema.validateAsync(req.body);
+    const movie = await Movie.findOne({movieId: data.movieId});
+    return res.send({videoLink: "http://fliqxify-backend.aqeelshamz.com/" + movie.movieFile})
+  } 
+  catch(err){
+    return res.status(500).send("Something went wrong");
+  }
+})
+
 module.exports = router;
