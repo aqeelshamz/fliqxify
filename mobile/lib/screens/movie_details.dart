@@ -35,6 +35,8 @@ List reviews = [];
 
 int _selectedReview = -1;
 
+String _videoLink = "";
+
 class MovieDetails extends StatefulWidget {
   final String movieId;
   final String posterImage;
@@ -176,7 +178,7 @@ class _MovieDetailsState extends State<MovieDetails>
                       SizedBox(height: height * 0.03),
                       LargeButton(
                           onTap: () {
-                            Get.to(() => const MovieVideoPlayer());
+                            Get.to(() => MovieVideoPlayer(_videoLink));
                           },
                           label: "PLAY",
                           icon: FeatherIcons.play),
@@ -600,6 +602,8 @@ class _MovieDetailsState extends State<MovieDetails>
     );
     trailer = jsonDecode(response.body);
 
+    await getVideoLink();
+
     setState(() {
       _loadingTrailer = false;
     });
@@ -716,5 +720,28 @@ class _MovieDetailsState extends State<MovieDetails>
           msg: "Review deleted!", backgroundColor: primaryColor);
       getReviews();
     }
+  }
+
+  getVideoLink() async{
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
+      "Content-Type": "application/json"
+    };
+    Map<String, dynamic> body = {
+      "movieId": widget.movieId,
+    };
+
+    var response = await http.post(
+      Uri.parse("$serverURL/movies/video"),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    print("LINK:"  + jsonDecode(response.body)["videoLink"]);
+
+    setState(() {
+      _videoLink = jsonDecode(response.body)["videoLink"];
+    });
   }
 }

@@ -6,7 +6,8 @@ import 'package:video_player/video_player.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 
 class MovieVideoPlayer extends StatefulWidget {
-  const MovieVideoPlayer({Key? key}) : super(key: key);
+  final String videoLink;
+  const MovieVideoPlayer(this.videoLink, {Key? key}) : super(key: key);
 
   @override
   _MovieVideoPlayerState createState() => _MovieVideoPlayerState();
@@ -20,7 +21,7 @@ class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
     super.initState();
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.network(
-          "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+          widget.videoLink == "" ?  "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4" : widget.videoLink),
     );
     flickManager?.flickDisplayManager?.handleVideoTap();
   }
