@@ -141,25 +141,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single("file");
 
-router.post("/upload", validate, async (req, res)=>{
-  const schema = joi.object({
-    movieId: joi.string().required(),
-  });
+router.post("/upload", validate, async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.sendStatus(500);
+    }
 
-  try{
-    const data = await schema.validateAsync(req.body);
-    upload(req, res, async (err)=>{
-      if(err){
-        return res.sendStatus(500);
-      }
-
-      await Movie.findByIdAndUpdate(data.movieId, {movieFile: req.file.filename});
-      res.send(req.file);
+    await Movie.findByIdAndUpdate(req.movieId, {
+      movieFile: req.file.filename,
     });
-  }
-  catch(err){
-    return res.status(500).send("Something went wrong");
-  }
-})
+    res.send(req.file);
+  });
+});
 
 module.exports = router;
