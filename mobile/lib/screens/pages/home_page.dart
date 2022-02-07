@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
+import 'package:netflixclone/screens/notifications.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/thumbnail_card.dart';
@@ -45,7 +47,9 @@ class _HomePageState extends State<HomePage> {
           ),
           Image.asset("assets/images/textLogo.png", width: width * 0.4),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(() => const NotificationsPage());
+            },
             icon: Stack(children: [
               Icon(
                 FeatherIcons.bell,
@@ -68,7 +72,7 @@ class _HomePageState extends State<HomePage> {
       SizedBox(height: height * 0.02),
       Expanded(
         child: RefreshIndicator(
-          onRefresh: ()async{
+          onRefresh: () async {
             getData();
           },
           child: ListView(

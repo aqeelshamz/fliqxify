@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/screens/signin.dart';
 import 'package:netflixclone/screens/signup.dart';
 import 'package:netflixclone/utils/colors.dart';
@@ -7,6 +8,7 @@ import 'package:netflixclone/utils/size.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netflixclone/widgets/large_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -31,11 +33,8 @@ class _GetStartedState extends State<GetStarted> {
                 enlargeCenterPage: false,
                 autoPlay: true,
               ),
-              items: [
-                "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/fliq.png",
-                "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/posters_bg.png"
-              ]
-                  .map((item) => Container(
+              items: 
+                  Provider.of<MoviesProvider>(context).posterUrls.map((item) => Container(
                         child: Center(
                             child: Image.network(
                           item,

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:netflixclone/utils/api.dart';
+import 'package:provider/provider.dart';
 
 class MoviesProvider extends ChangeNotifier {
   List popular = [];
@@ -88,10 +90,16 @@ class MoviesProvider extends ChangeNotifier {
 
   bool searchingMovie = false;
 
+  List posterUrls = [];
+
   getPopular() async {
     var response = await http.get(Uri.parse(
         "$tmdbUrl/movie/popular" + tmdbApiKey + "&language=en-US&page=1"));
     popular = jsonDecode(response.body)["results"];
+    for (int i = 0; i < 4; i++) {
+      posterUrls.add("https://image.tmdb.org/t/p/original" +
+          popular[i]["poster_path"]);
+    }
   }
 
   getTopRated() async {

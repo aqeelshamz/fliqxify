@@ -25,6 +25,9 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   void initState() {
+    setState(() {
+      _editUsername = false;
+    });
     super.initState();
   }
 

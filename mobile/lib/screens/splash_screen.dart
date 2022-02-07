@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/get_started.dart';
 import 'package:netflixclone/screens/home.dart';
@@ -46,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void getData() async {
+    await Provider.of<MoviesProvider>(context, listen: false).getPopular();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString("token") == null) {
       Get.offAll(() => const GetStarted());
