@@ -129,7 +129,7 @@ class _PlansState extends State<Plans> {
                                   ),
                                 ),
                                 Text(
-                                  "PER MONTH",
+                                  _plans[index]["month"].toString(),
                                   style: TextStyle(
                                     color: white,
                                     fontSize: 12.sp,
@@ -238,4 +238,6 @@ class _PlansState extends State<Plans> {
     }
     return widgets;
   }
+
+  
 }

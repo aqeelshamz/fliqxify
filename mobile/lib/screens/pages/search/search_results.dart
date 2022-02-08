@@ -9,6 +9,7 @@ import 'package:netflixclone/widgets/thumbnail_card.dart';
 import 'package:provider/provider.dart';
 
 bool _searchingMovie = false;
+String _keyword = "";
 
 class SearchResults extends StatefulWidget {
   final String keyword;
@@ -22,7 +23,10 @@ class _SearchResultsState extends State<SearchResults> {
   @override
   void initState() {
     super.initState();
-    searchMovie();
+    searchMovie(widget.keyword);
+    setState(() {
+      _keyword = "";
+    });
   }
 
   @override
@@ -39,7 +43,10 @@ class _SearchResultsState extends State<SearchResults> {
               TextFormField(
                 textInputAction: TextInputAction.search,
                 onFieldSubmitted: (text) {
-                  print(text);
+                  searchMovie(text);
+                  setState(() {
+                    _keyword = text;
+                  });
                 },
                 decoration: InputDecoration(
                   fillColor: grey1,
@@ -74,7 +81,7 @@ class _SearchResultsState extends State<SearchResults> {
                     ),
                   ),
                   Text(
-                    "\"${widget.keyword}\"",
+                    "\"${_keyword == "" ? widget.keyword : _keyword}\"",
                     style: TextStyle(
                         color: primaryColor,
                         fontSize: 16.sp,
@@ -179,13 +186,13 @@ class _SearchResultsState extends State<SearchResults> {
     return widgets;
   }
 
-  void searchMovie() async {
+  void searchMovie(String keyword) async {
     setState(() {
       _searchingMovie = true;
     });
 
     await Provider.of<MoviesProvider>(context, listen: false)
-        .searchMovie(widget.keyword);
+        .searchMovie(keyword);
 
     setState(() {
       _searchingMovie = false;
