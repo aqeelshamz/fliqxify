@@ -10,7 +10,7 @@ mongoose.connect(process.env.DB_URL, (err) => {
   if (!err) console.log("DB Connected!");
 });
 
-const usersRouter = require("./routes/user");
+const usersRouter = require("./routes/users");
 const plansRouter = require("./routes/plans");
 const moviesRouter = require("./routes/movies");
 

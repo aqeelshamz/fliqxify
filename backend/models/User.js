@@ -39,7 +39,11 @@ const userSchema = mongoose.Schema(
     continueWatching: {
       type: Array,
       default: []
-    }
+    },
+    likedMovies: {
+      type: Array,
+      default: []
+    }, 
   },
   { timestamps: true }
 );

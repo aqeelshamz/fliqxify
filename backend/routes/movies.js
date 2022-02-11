@@ -109,7 +109,7 @@ router.post("/delete-review", async (req, res) => {
   }
 });
 
-router.post("/like", validate, async (req, res) => {
+router.post("/like-review", validate, async (req, res) => {
   const schema = joi.object({
     reviewId: joi.string().required(),
   });
@@ -194,6 +194,56 @@ router.post("/video", validate, async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    return res.status(500).send("Something went wrong");
+  }
+});
+
+router.post("/like", validate, async (req, res) => {
+  const schema = joi.object({
+    movieId: joi.string().required()
+  });
+
+  try
+  {
+    const data = await schema.validateAsync(req.body);
+    const user = await User.findById(req.user._id);
+    let likedMovies=  user.likedMovies;
+    if(likedMovies.includes(data.movieId)){
+      likedMovies.splice(likedMovies.indexOf(data.movieId), 1);
+    }
+    else{
+      likedMovies.push(data.movieId);
+    }
+    await User.findByIdAndUpdate(req.user._id, {likedMovies: likedMovies})
+    return res.send(await User.findById(req.user._id, "likedMovies"));
+  }
+  catch(err){
+    console.log(err)
+    return res.status(500).send("Something went wrong");
+  }
+});
+
+router.post("/watchlist", validate, async (req, res) => {
+  const schema = joi.object({
+    movieId: joi.string().required()
+  });
+
+  try
+  {
+    const data = await schema.validateAsync(req.body);
+    const user = await User.findById(req.user._id);
+    let watchlist =  user.watchlist;
+    if(watchlist.includes(data.movieId)){
+      watchlist.splice(watchlist.indexOf(data.movieId), 1);
+    }
+    else{
+      watchlist.push(data.movieId);
+    }
+    await User.findByIdAndUpdate(req.user._id, {watchlist: watchlist})
+    return res.send(await User.findById(req.user._id, "watchlist"));
+  }
+  catch(err){
+    console.log(err)
     return res.status(500).send("Something went wrong");
   }
 });
