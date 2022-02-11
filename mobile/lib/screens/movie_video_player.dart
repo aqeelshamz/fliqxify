@@ -1,9 +1,11 @@
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:netflixclone/providers/movie_player_provider.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
-import 'package:video_player/video_player.dart';
-import 'package:flick_video_player/flick_video_player.dart';
+import 'package:provider/provider.dart';
 
 class MovieVideoPlayer extends StatefulWidget {
   final String videoLink;
@@ -14,34 +16,40 @@ class MovieVideoPlayer extends StatefulWidget {
 }
 
 class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
-  FlickManager? flickManager;
+  BetterPlayerController? _betterPlayerController;
 
   @override
   void initState() {
     super.initState();
-    flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.network(
-          widget.videoLink == "" ?  "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4" : widget.videoLink),
+     BetterPlayerConfiguration betterPlayerConfiguration =
+        BetterPlayerConfiguration(
+      aspectRatio: 16 / 9,
+      fit: BoxFit.contain,
     );
-    flickManager?.flickDisplayManager?.handleVideoTap();
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+       widget.videoLink == ""
+          ? "http://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"
+          : widget.videoLink,
+    );
+    _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
+    _betterPlayerController?.setupDataSource(dataSource);
   }
 
   @override
   void dispose() {
-    flickManager?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: FlickVideoPlayer(
-        flickManager: flickManager!,
-        // flickVideoWithControls: FlickVideoWithControls(
-        //   controls: LandscapePlayerControls(),
-        // ),
-      )),
+      body: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: BetterPlayer(
+          controller: _betterPlayerController!,
+        ),
+      ),
     );
   }
 }

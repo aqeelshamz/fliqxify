@@ -9,15 +9,24 @@ import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
 
-class Search extends StatelessWidget {
+String _keyword = "";
+TextEditingController _controller = TextEditingController();
+
+class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
 
+  @override
+  State<Search> createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          controller: _controller,
           textInputAction: TextInputAction.search,
           onFieldSubmitted: (text) {
             Get.to(() => SearchResults(text));
@@ -29,7 +38,14 @@ class Search extends StatelessWidget {
             hintText: "Search",
             hintStyle: TextStyle(color: grey3),
             contentPadding: EdgeInsets.symmetric(horizontal: width * 0.04),
-            suffixIcon: null,
+            suffixIcon: _keyword == ""
+                ? const SizedBox.shrink()
+                : InkWell(onTap: (){
+                  _controller.clear();
+                  setState(() {
+                    _keyword = "";
+                  });
+                } ,child: Icon(FeatherIcons.x, color: grey3)),
             prefixIcon: Icon(FeatherIcons.search, color: grey3),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
@@ -40,7 +56,11 @@ class Search extends StatelessWidget {
             color: white,
             fontSize: 15.sp,
           ),
-          onChanged: (e) {},
+          onChanged: (text) {
+            setState(() {
+              _keyword = text;
+            });
+          },
         ),
         SizedBox(height: height * 0.04),
         Expanded(
@@ -77,8 +97,12 @@ class Search extends StatelessWidget {
                 .length;
         i++) {
       widgets.add(InkWell(
-        onTap: (){
-          Get.to(()=> CategoryPage(Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["name"], Provider.of<MoviesProvider>(Get.context!, listen: false).categories[i]["id"]));
+        onTap: () {
+          Get.to(() => CategoryPage(
+              Provider.of<MoviesProvider>(Get.context!, listen: false)
+                  .categories[i]["name"],
+              Provider.of<MoviesProvider>(Get.context!, listen: false)
+                  .categories[i]["id"]));
         },
         child: Column(
           children: [

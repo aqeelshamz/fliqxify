@@ -55,7 +55,14 @@ class _SearchResultsState extends State<SearchResults> {
                   hintStyle: TextStyle(color: grey3),
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: width * 0.04),
-                  suffixIcon: null,
+                  suffixIcon: _keyword == ""
+                      ? const SizedBox.shrink()
+                      : InkWell(onTap: () {
+                          // _controller.clear();
+                          setState(() {
+                            _keyword = "";
+                          });
+                        }),
                   prefixIcon: Icon(FeatherIcons.search, color: grey3),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),

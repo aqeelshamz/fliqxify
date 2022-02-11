@@ -27,9 +27,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  better_player: ^0.0.81
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
-  flick_video_player: ^0.3.0
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
