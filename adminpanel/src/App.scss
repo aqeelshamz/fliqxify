@@ -1,0 +1,69 @@
+$black: #252525;
+$primaryColor: #F28705;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background: black;
+}
+
+.App{
+    padding: 30px;
+}
+
+h1{
+    color: $primaryColor;
+    margin-bottom: 30px;
+}
+
+.row{
+    display: flex;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+img{
+    width: 100px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+#search-result{
+    margin-top: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#search-result:hover{
+    background: #151515;
+}
+
+input{
+    padding: 7px;
+    width: 300px;
+    background: transparent;
+    outline: none;
+    border: 2px solid #565656;
+    border-radius: 2px;
+    font-size: 1rem;
+}
+
+#progress-bar{
+    height: 30px;
+    width: 500px;
+    background: #252525;
+    #progress{
+        height: 30px;
+        background: $primaryColor;
+    }
+}
