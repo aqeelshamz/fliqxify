@@ -8,6 +8,7 @@ function App() {
     getPopularMovies();
   }, []);
 
+  const [loggedIn, setLoggedIn] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
 
@@ -78,7 +79,10 @@ function App() {
   const [dataLoaded, setDataLoaded] = useState(0);
   const [dataTotal, setDataTotal] = useState(0);
 
-  return (
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  return loggedIn ? (
     <div className="App">
       <h1>Fliqxify Admin Panel</h1>
       <h2>Upload Movie</h2>
@@ -197,6 +201,36 @@ function App() {
           <br />
         </div>
       </div>
+    </div>
+  ) : (
+    <div className="App">
+      <h1>Fliqxify Admin Panel</h1>
+      <h2>Login</h2>
+      <br />
+      <input
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        type="text"
+        placeholder="Username"
+      />
+      <br />
+      <br />
+      <input
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        type="password"
+        placeholder="Password"
+      />
+      <br />
+      <br />
+      <button onClick={()=>{
+        if(username === "admin" && password === "#fliqxify2022"){
+          setLoggedIn(true);
+        }
+        else{
+          alert("Incorrect username or password");
+        }
+      }}>Login</button>
     </div>
   );
 }
