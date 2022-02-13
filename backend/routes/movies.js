@@ -272,10 +272,11 @@ router.get("/my-watchlist", validate, async (req, res) => {
     };
 
     axios(config).then((response) => {
-      console.log(response.data)
       watchlistMovies.push(response.data);
     });
   }
+
+  console.log(watchlistMovies);
 
   return res.send(watchlistMovies);
 });
