@@ -106,8 +106,7 @@ function App() {
                 <p>
                   {parseInt(dataLoaded / 1024 / 1000).toString().length > 3
                     ? (parseInt(dataLoaded / 1024 / 1000) / 1000).toFixed(2)
-                    : parseInt(dataLoaded / 1024 / 1000)
-                        .toString()}{" "}
+                    : parseInt(dataLoaded / 1024 / 1000).toString()}{" "}
                   {parseInt(dataLoaded / 1024 / 1000).toString().length > 3
                     ? "GB"
                     : "MB"}{" "}
@@ -120,9 +119,15 @@ function App() {
                     : "MB"}
                 </p>
               </div>
-              <div className="row" style={{width: "500px"}}>
-                <button onClick={()=>window.location.reload()}>Cancel</button>
-              </div>
+              {progress === 100 ? (
+                ""
+              ) : (
+                <div className="row" style={{ width: "500px" }}>
+                  <button onClick={() => window.location.reload()}>
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <>
