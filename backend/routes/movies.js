@@ -248,4 +248,24 @@ router.post("/watchlist", validate, async (req, res) => {
   }
 });
 
+router.post("/movie-user-data", validate, async (req, res)=>{
+  const schema = joi.object({
+    movieId: joi.string().required(),
+  });
+
+  try{
+    const data = await schema.validateAsync(req.body);
+    const user = await User.findById(req.user._id);
+    let userData = {
+      isLiked: user.likedMovies.includes(data.movieId),
+      inWatchlist = user.watchlist.includes(data.movieId)
+    };
+
+    return res.send(userData);
+  }
+  catch(err){
+    return res.status(500).send("Something went wrong");
+  }
+})
+
 module.exports = router;
