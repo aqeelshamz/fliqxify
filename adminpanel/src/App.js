@@ -107,7 +107,6 @@ function App() {
                   {parseInt(dataLoaded / 1024 / 1000).toString().length > 3
                     ? (parseInt(dataLoaded / 1024 / 1000) / 1000).toFixed(2)
                     : parseInt(dataLoaded / 1024 / 1000)
-                        .toFixed(2)
                         .toString()}{" "}
                   {parseInt(dataLoaded / 1024 / 1000).toString().length > 3
                     ? "GB"
@@ -115,7 +114,7 @@ function App() {
                   /{" "}
                   {parseInt(dataTotal / 1024 / 1000).toString().length > 3
                     ? (parseInt(dataTotal / 1024 / 1000) / 1000).toFixed(2)
-                    : parseInt(dataTotal / 1024 / 1000).toFixed(2)}{" "}
+                    : parseInt(dataTotal / 1024 / 1000)}{" "}
                   {parseInt(dataTotal / 1024 / 1000).toString().length > 3
                     ? "GB"
                     : "MB"}
