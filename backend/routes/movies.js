@@ -258,7 +258,7 @@ router.post("/movie-user-data", validate, async (req, res)=>{
     const user = await User.findById(req.user._id);
     let userData = {
       isLiked: user.likedMovies.includes(data.movieId),
-      inWatchlist = user.watchlist.includes(data.movieId)
+      inWatchlist: user.watchlist.includes(data.movieId)
     };
 
     return res.send(userData);
