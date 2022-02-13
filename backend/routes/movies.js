@@ -263,13 +263,16 @@ router.post("/movie-user-data", validate, async (req, res) => {
 
 router.get("/my-watchlist", validate, async (req, res) => {
   const user = await User.findById(req.user._id);
+  console.log(user);
   let watchlistMovies = [];
   for (const movieId of user.watchlist) {
+    console.log(movieId);
     const config = {
       url: `https://api.themoviedb.org/3/movie/${movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`,
     };
 
     axios(config).then((response) => {
+      console.log(response.data)
       watchlistMovies.push(response.data);
     });
   }
