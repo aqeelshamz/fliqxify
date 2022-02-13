@@ -264,7 +264,7 @@ router.post("/movie-user-data", validate, async (req, res) => {
 router.get("/my-watchlist", validate, async (req, res) => {
   const user = await User.findById(req.user._id);
   let watchlistMovies = [];
-  for (var movieId in user.watchlist) {
+  for (const movieId of user.watchlist) {
     const config = {
       url: `https://api.themoviedb.org/3/movie/${movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`,
     };
