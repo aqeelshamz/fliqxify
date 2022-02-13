@@ -20,7 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 bool _showReviews = false;
-bool _liked = false;
 bool _loading = true;
 bool _loadingTrailer = true;
 bool _postingReview = false;
@@ -36,6 +35,9 @@ List reviews = [];
 int _selectedReview = -1;
 
 String _videoLink = "";
+
+bool _isLiked = false;
+bool _inWatchlist = false;
 
 class MovieDetails extends StatefulWidget {
   final String movieId;
@@ -198,19 +200,22 @@ class _MovieDetailsState extends State<MovieDetails>
                                         onTap: onLikeButtonTapped,
                                         likeBuilder: (isLiked) {
                                           return Icon(
-                                            _liked
+                                            _isLiked
                                                 ? Icons.favorite
                                                 : FeatherIcons.heart,
                                             color:
-                                                _liked ? primaryColor : white,
+                                                _isLiked ? primaryColor : white,
                                             size: 24.sp,
                                           );
                                         }),
                                     SizedBox(height: height * 0.005),
                                     Text(
-                                      _liked ? "Liked" : "Like",
+                                      _isLiked ? "Liked" : "Like",
                                       style: TextStyle(
-                                          color: white, fontSize: 12.sp),
+                                          color: _isLiked
+                                              ? primaryColor
+                                              : white,
+                                          fontSize: 12.sp),
                                     ),
                                   ],
                                 ),
@@ -220,18 +225,29 @@ class _MovieDetailsState extends State<MovieDetails>
                           Expanded(
                             child: InkWell(
                               borderRadius: BorderRadius.circular(borderRadius),
-                              onTap: () {},
+                              onTap: () {
+                                addToWatchlist();
+                              },
                               child: Padding(
                                 padding: EdgeInsets.all(width * 0.02),
                                 child: Column(
                                   children: [
-                                    Icon(FeatherIcons.plus,
-                                        color: white, size: 24.sp),
+                                    Icon(
+                                      _inWatchlist
+                                          ? FeatherIcons.check
+                                          : FeatherIcons.plus,
+                                      color:
+                                          _inWatchlist ? primaryColor : white,
+                                      size: 24.sp,
+                                    ),
                                     SizedBox(height: height * 0.005),
                                     Text(
                                       "My List",
                                       style: TextStyle(
-                                          color: white, fontSize: 12.sp),
+                                          color: _inWatchlist
+                                              ? primaryColor
+                                              : white,
+                                          fontSize: 12.sp),
                                     ),
                                   ],
                                 ),
@@ -574,10 +590,29 @@ class _MovieDetailsState extends State<MovieDetails>
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
+      "Content-Type": "application/json"
+    };
+    Map<String, dynamic> body = {
+      "movieId": widget.movieId,
+    };
+
+    var response = await http.post(
+      Uri.parse("$serverURL/movies/like"),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
     setState(() {
-      _liked = !_liked;
+      _isLiked =
+          jsonDecode(response.body)["likedMovies"].contains(widget.movieId);
     });
-    return _liked;
+
+    getMovieUserData();
+
+    return _isLiked;
   }
 
   void getData() async {
@@ -589,10 +624,6 @@ class _MovieDetailsState extends State<MovieDetails>
     await Provider.of<MoviesProvider>(context, listen: false)
         .getMovieDetails(widget.movieId);
 
-    setState(() {
-      _loading = false;
-    });
-
     Map<String, String> headers = {"Content-Type": "application/json"};
     Map<String, dynamic> body = {"movieId": widget.movieId};
     var response = await http.post(
@@ -603,9 +634,11 @@ class _MovieDetailsState extends State<MovieDetails>
     trailer = jsonDecode(response.body);
 
     await getVideoLink();
+    await getMovieUserData();
 
     setState(() {
       _loadingTrailer = false;
+      _loading = false;
     });
   }
 
@@ -683,7 +716,7 @@ class _MovieDetailsState extends State<MovieDetails>
     };
 
     var response = await http.post(
-      Uri.parse("$serverURL/movies/like"),
+      Uri.parse("$serverURL/movies/like-review"),
       headers: headers,
       body: jsonEncode(body),
     );
@@ -722,7 +755,7 @@ class _MovieDetailsState extends State<MovieDetails>
     }
   }
 
-  getVideoLink() async{
+  getVideoLink() async {
     Map<String, String> headers = {
       "Authorization":
           "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
@@ -741,5 +774,51 @@ class _MovieDetailsState extends State<MovieDetails>
     setState(() {
       _videoLink = jsonDecode(response.body)["videoLink"];
     });
+  }
+
+  getMovieUserData() async {
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
+      "Content-Type": "application/json"
+    };
+    Map<String, dynamic> body = {
+      "movieId": widget.movieId,
+    };
+
+    var response = await http.post(
+      Uri.parse("$serverURL/movies/movie-user-data"),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    setState(() {
+      _isLiked = jsonDecode(response.body)["isLiked"];
+      _inWatchlist = jsonDecode(response.body)["inWatchlist"];
+    });
+  }
+
+  addToWatchlist() async {
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT ${Provider.of<UserProvider>(context, listen: false).token}",
+      "Content-Type": "application/json"
+    };
+    Map<String, dynamic> body = {
+      "movieId": widget.movieId,
+    };
+
+    var response = await http.post(
+      Uri.parse("$serverURL/movies/watchlist"),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    setState(() {
+      _inWatchlist =
+          jsonDecode(response.body)["watchlist"].contains(widget.movieId);
+    });
+
+    getMovieUserData();
   }
 }

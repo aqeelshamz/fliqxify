@@ -21,14 +21,22 @@ class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
   @override
   void initState() {
     super.initState();
-     BetterPlayerConfiguration betterPlayerConfiguration =
-        BetterPlayerConfiguration(
+    BetterPlayerConfiguration betterPlayerConfiguration =
+        const BetterPlayerConfiguration(
       aspectRatio: 16 / 9,
-      fit: BoxFit.contain,
+      fit: BoxFit.fitWidth,
+      fullScreenByDefault: true,
+      autoPlay: true,
+      allowedScreenSleep: false,
+      controlsConfiguration: BetterPlayerControlsConfiguration(
+        enablePlayPause: false,
+        enableMute: true,
+        enableFullscreen: false,
+    ),
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-       widget.videoLink == ""
+      widget.videoLink == ""
           ? "http://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8"
           : widget.videoLink,
     );
@@ -38,6 +46,7 @@ class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
 
   @override
   void dispose() {
+    _betterPlayerController?.dispose();
     super.dispose();
   }
 

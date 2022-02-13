@@ -77,75 +77,80 @@ class _SearchResultsState extends State<SearchResults> {
               ),
               SizedBox(height: height * 0.04),
               Expanded(
-                  child: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  Text(
-                    "Search results for",
-                    style: TextStyle(
-                      color: white,
-                      fontSize: 18.sp,
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    Text(
+                      "Search results for",
+                      style: TextStyle(
+                        color: white,
+                        fontSize: 18.sp,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "\"${_keyword == "" ? widget.keyword : _keyword}\"",
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  SizedBox(height: height * 0.04),
-                  _searchingMovie
-                      ? const Center(child: CircularProgressIndicator())
-                      : Provider.of<MoviesProvider>(context)
-                              .searchResult
-                              .isEmpty
-                          ? Column(children: [
-                              SizedBox(height: height * 0.1),
-                              Icon(
-                                FeatherIcons.xCircle,
-                                color: grey2,
-                                size: width * 0.25,
-                              ),
-                              SizedBox(height: height * 0.02),
-                              Text(
-                                "No results found.",
-                                style: TextStyle(
+                    Text(
+                      "\"${_keyword == "" ? widget.keyword : _keyword}\"",
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    SizedBox(height: height * 0.04),
+                    _searchingMovie
+                        ? SizedBox(
+                            height: height * 0.5,
+                            child: const Center(
+                                child: CircularProgressIndicator()))
+                        : Provider.of<MoviesProvider>(context)
+                                .searchResult
+                                .isEmpty
+                            ? Column(children: [
+                                SizedBox(height: height * 0.1),
+                                Icon(
+                                  FeatherIcons.xCircle,
                                   color: grey2,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
+                                  size: width * 0.25,
                                 ),
+                                SizedBox(height: height * 0.02),
+                                Text(
+                                  "No results found.",
+                                  style: TextStyle(
+                                    color: grey2,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ])
+                            : GridView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        childAspectRatio: 8 / 11,
+                                        mainAxisSpacing: height * 0.015),
+                                scrollDirection: Axis.vertical,
+                                itemCount: Provider.of<MoviesProvider>(context)
+                                    .searchResult
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return ThumbnailCard(
+                                      movieId:
+                                          Provider.of<MoviesProvider>(context)
+                                              .searchResult[index]["id"]
+                                              .toString(),
+                                      heroId: "${index}mylist",
+                                      imageUrl:
+                                          "https://image.tmdb.org/t/p/w200" +
+                                              Provider.of<MoviesProvider>(
+                                                          context)
+                                                      .searchResult[index]
+                                                  ["poster_path"]);
+                                },
                               ),
-                            ])
-                          : GridView.builder(
-                              primary: false,
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      childAspectRatio: 8 / 11,
-                                      mainAxisSpacing: height * 0.015),
-                              scrollDirection: Axis.vertical,
-                              itemCount: Provider.of<MoviesProvider>(context)
-                                  .searchResult
-                                  .length,
-                              itemBuilder: (context, index) {
-                                return ThumbnailCard(
-                                    movieId:
-                                        Provider.of<MoviesProvider>(context)
-                                            .searchResult[index]["id"]
-                                            .toString(),
-                                    heroId: "${index}mylist",
-                                    imageUrl:
-                                        "https://image.tmdb.org/t/p/w200" +
-                                            Provider.of<MoviesProvider>(context)
-                                                    .searchResult[index]
-                                                ["poster_path"]);
-                              },
-                            ),
-                ],
-              )),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -114,6 +115,14 @@ class MoviesProvider extends ChangeNotifier {
         "&language=en-US&page=1&query=" +
         keyword));
     searchResult = jsonDecode(response.body)["results"];
+    List newResult = [];
+    for(int i = 0; i < searchResult.length; i++){
+      if(searchResult[i]["poster_path"] != null){
+        newResult.add(searchResult[i]);
+      }
+    }
+    searchResult = newResult;
+    notifyListeners();
   }
 
   getMoviesByCategory(int categoryId) async {

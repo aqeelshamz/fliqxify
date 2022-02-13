@@ -7,6 +7,7 @@ import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/change_password.dart';
 import 'package:netflixclone/screens/get_started.dart';
 import 'package:netflixclone/screens/settings.dart';
+import 'package:netflixclone/screens/watchlist.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
@@ -134,7 +135,9 @@ class _ProfileState extends State<Profile> {
           height: height * 0.02,
         ),
         ListTile(
-          onTap: () {},
+          onTap: () {
+            Get.to(()=> const WatchlistScreen());
+          },
           leading: Icon(FeatherIcons.tv, color: white),
           trailing: Icon(FeatherIcons.chevronRight, color: white),
           title: Text(
