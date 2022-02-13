@@ -271,7 +271,7 @@ router.get("/my-watchlist", validate, async (req, res) => {
     watchlistMovies.push(response.data);
   }
 
-  console.log(watchlistMovies);
+  watchlistMovies = watchlistMovies.reverse();
 
   return res.send(watchlistMovies);
 });
