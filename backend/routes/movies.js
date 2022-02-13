@@ -127,6 +127,7 @@ router.post("/like-review", validate, async (req, res) => {
 
     return res.send("Like updated");
   } catch (err) {
+    console.log(err)
     return res.status(500).send("Something went wrong");
   }
 });
