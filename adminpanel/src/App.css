@@ -57,7 +57,7 @@ input {
   background: transparent;
   outline: none;
   border: 2px solid #565656;
-  border-radius: 2px;
+  border-radius: 5px;
   font-size: 1rem;
 }
 
@@ -65,10 +65,23 @@ input {
   height: 30px;
   width: 500px;
   background: #252525;
+  border-radius: 5px;
 }
 
 #progress-bar #progress {
+  border-radius: 5px;
   height: 30px;
   background: #F28705;
+}
+
+button {
+  cursor: pointer;
+  margin-top: 20px;
+  background: #F28705;
+  padding: 10px;
+  width: 150px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
 }
 /*# sourceMappingURL=App.css.map */

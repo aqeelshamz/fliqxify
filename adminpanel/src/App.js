@@ -120,6 +120,9 @@ function App() {
                     : "MB"}
                 </p>
               </div>
+              <div className="row" style={{width: "500px"}}>
+                <button onClick={()=>window.location.reload()}>Cancel</button>
+              </div>
             </div>
           ) : (
             <>
