@@ -200,72 +200,81 @@ router.post("/video", validate, async (req, res) => {
 
 router.post("/like", validate, async (req, res) => {
   const schema = joi.object({
-    movieId: joi.string().required()
+    movieId: joi.string().required(),
   });
 
-  try
-  {
+  try {
     const data = await schema.validateAsync(req.body);
     const user = await User.findById(req.user._id);
-    let likedMovies=  user.likedMovies;
-    if(likedMovies.includes(data.movieId)){
+    let likedMovies = user.likedMovies;
+    if (likedMovies.includes(data.movieId)) {
       likedMovies.splice(likedMovies.indexOf(data.movieId), 1);
-    }
-    else{
+    } else {
       likedMovies.push(data.movieId);
     }
-    await User.findByIdAndUpdate(req.user._id, {likedMovies: likedMovies})
+    await User.findByIdAndUpdate(req.user._id, { likedMovies: likedMovies });
     return res.send(await User.findById(req.user._id, "likedMovies"));
-  }
-  catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 });
 
 router.post("/watchlist", validate, async (req, res) => {
   const schema = joi.object({
-    movieId: joi.string().required()
+    movieId: joi.string().required(),
   });
 
-  try
-  {
+  try {
     const data = await schema.validateAsync(req.body);
     const user = await User.findById(req.user._id);
-    let watchlist =  user.watchlist;
-    if(watchlist.includes(data.movieId)){
+    let watchlist = user.watchlist;
+    if (watchlist.includes(data.movieId)) {
       watchlist.splice(watchlist.indexOf(data.movieId), 1);
-    }
-    else{
+    } else {
       watchlist.push(data.movieId);
     }
-    await User.findByIdAndUpdate(req.user._id, {watchlist: watchlist})
+    await User.findByIdAndUpdate(req.user._id, { watchlist: watchlist });
     return res.send(await User.findById(req.user._id, "watchlist"));
-  }
-  catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 });
 
-router.post("/movie-user-data", validate, async (req, res)=>{
+router.post("/movie-user-data", validate, async (req, res) => {
   const schema = joi.object({
     movieId: joi.string().required(),
   });
 
-  try{
+  try {
     const data = await schema.validateAsync(req.body);
     const user = await User.findById(req.user._id);
     let userData = {
       isLiked: user.likedMovies.includes(data.movieId),
-      inWatchlist: user.watchlist.includes(data.movieId)
+      inWatchlist: user.watchlist.includes(data.movieId),
     };
 
     return res.send(userData);
-  }
-  catch(err){
+  } catch (err) {
     return res.status(500).send("Something went wrong");
   }
-})
+});
+
+router.get("/my-watchlist", validate, async (req, res) => {
+  const user = await User.findById(req.user._id);
+  let watchlistMovies = [];
+  for (var movieId in user.watchlist) {
+    const config = {
+      url: `https://api.themoviedb.org/3/movie/${movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`,
+    };
+
+    axios(config).then((response) => {
+      watchlistMovies.push(response.data);
+    });
+  }
+
+  return res.send(watchlistMovies);
+});
 
 module.exports = router;
