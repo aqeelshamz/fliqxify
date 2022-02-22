@@ -1,9 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
+import 'package:netflixclone/screens/movie_details.dart';
 import 'package:netflixclone/screens/notifications.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
@@ -12,6 +14,7 @@ import 'package:provider/provider.dart';
 
 bool _loadingPopular = true;
 bool _loadingTopRated = true;
+bool _loadingBanners = true;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -93,6 +96,17 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 14.sp,
                 ),
               ),
+              SizedBox(height: height * 0.04),
+              _loadingBanners
+                  ? const Center(child: CircularProgressIndicator())
+                  : CarouselSlider(
+                      options: CarouselOptions(
+                        height: height * 0.24,
+                        viewportFraction: 1.0,
+                        enlargeCenterPage: false,
+                        autoPlay: true,
+                      ),
+                      items: getBanners()),
               SizedBox(height: height * 0.04),
               Row(
                 children: [
@@ -189,6 +203,12 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _loadingPopular = true;
       _loadingTopRated = true;
+      _loadingBanners = true;
+    });
+
+    await Provider.of<MoviesProvider>(context, listen: false).getBanners();
+    setState(() {
+      _loadingBanners = false;
     });
 
     await Provider.of<MoviesProvider>(context, listen: false).getPopular();
@@ -200,5 +220,31 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _loadingTopRated = false;
     });
+  }
+
+  List<Widget> getBanners() {
+    List<Widget> widgets = [];
+    for (int i = 0;
+        i < Provider.of<MoviesProvider>(context, listen: false).banners.length;
+        i++) {
+      widgets.add(
+        InkWell(
+          onTap: () {
+            Get.to(() => MovieDetails(
+                  movieId: Provider.of<MoviesProvider>(context).banners[i]["movieId"],
+                  heroId: Provider.of<MoviesProvider>(context).banners[i]["movieId"],
+                  posterImage: "https://image.tmdb.org/t/p/w200" + Provider.of<MoviesProvider>(context).banners[i]["posterUrl"],
+                ));
+          },
+          child: SizedBox(
+            child: Image.network(
+              Provider.of<MoviesProvider>(context).banners[i]["imageUrl"],
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+    }
+    return widgets;
   }
 }

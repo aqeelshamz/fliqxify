@@ -93,6 +93,8 @@ class MoviesProvider extends ChangeNotifier {
 
   List posterUrls = [];
 
+  List banners = [];
+
   getPopular() async {
     var response = await http.get(Uri.parse(
         "$tmdbUrl/movie/popular" + tmdbApiKey + "&language=en-US&page=1"));
@@ -137,5 +139,10 @@ class MoviesProvider extends ChangeNotifier {
     var response = await http.get(Uri.parse(
         "$tmdbUrl/movie/" + movieId + tmdbApiKey + "&language=en-US&page=1"));
     movieDetails = jsonDecode(response.body);
+  }
+
+  getBanners() async{
+    var response = await http.get(Uri.parse("$serverURL/banners"));
+    banners = jsonDecode(response.body);
   }
 }
