@@ -13,6 +13,7 @@ mongoose.connect(process.env.DB_URL, (err) => {
 const usersRouter = require("./routes/users");
 const plansRouter = require("./routes/plans");
 const moviesRouter = require("./routes/movies");
+const bannersRouter = require("./routes/banners");
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 app.use("/users", usersRouter);
 app.use("/plans", plansRouter);
 app.use("/movies", moviesRouter);
+app.use("/banners", bannersRouter);
 
 app.listen(port, () => {
   console.log("Server started on port " + port);
