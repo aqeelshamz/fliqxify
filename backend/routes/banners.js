@@ -1,9 +1,21 @@
 const router = require("express").Router();
 const Banner = require("../models/Banner");
 const joi = require("joi");
+const { default: axios } = require("axios");
 
 router.get("/", async (req, res)=>{
-    res.send(await Banner.find());
+    const banners = await Banner.find();
+    let newBanners = [];
+    for(const banner of banners){
+        const movieId = banner.movieId;
+        var response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`);
+        newBanners.push({
+            movieId: movieId.toString(),
+            imageUrl: banner.imageUrl,
+            posterUrl: response.data.poster_path
+        });
+    }
+    res.send(newBanners);
 })
 
 router.post("/", async (req, res)=>{
