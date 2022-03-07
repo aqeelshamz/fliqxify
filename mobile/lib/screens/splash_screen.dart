@@ -4,10 +4,12 @@ import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/get_started.dart';
 import 'package:netflixclone/screens/home.dart';
+import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -47,6 +49,38 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void getData() async {
+    var response = await http.get(Uri.parse("$serverURL/status"));
+    if (response.body != "free") {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: grey,
+              content: Text(
+                response.body,
+                style: TextStyle(
+                  color: white,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Provider.of<UserProvider>(context, listen: false).logout();
+                    Get.back();
+                  },
+                  child: Text(
+                    "OK",
+                    style: TextStyle(
+                      color: white,
+                    ),
+                  ),
+                  style: TextButton.styleFrom(backgroundColor: primaryColor),
+                ),
+              ],
+            );
+          });
+      Get.back();
+    }
     await Provider.of<MoviesProvider>(context, listen: false).getPopular();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString("token") == null) {

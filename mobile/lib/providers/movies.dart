@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:provider/provider.dart';
 
@@ -95,13 +96,15 @@ class MoviesProvider extends ChangeNotifier {
 
   List banners = [];
 
+  List continueWatching = [];
+
   getPopular() async {
     var response = await http.get(Uri.parse(
         "$tmdbUrl/movie/popular" + tmdbApiKey + "&language=en-US&page=1"));
     popular = jsonDecode(response.body)["results"];
     for (int i = 0; i < 4; i++) {
-      posterUrls.add("https://image.tmdb.org/t/p/original" +
-          popular[i]["poster_path"]);
+      posterUrls.add(
+          "https://image.tmdb.org/t/p/original" + popular[i]["poster_path"]);
     }
   }
 
@@ -118,8 +121,8 @@ class MoviesProvider extends ChangeNotifier {
         keyword));
     searchResult = jsonDecode(response.body)["results"];
     List newResult = [];
-    for(int i = 0; i < searchResult.length; i++){
-      if(searchResult[i]["poster_path"] != null){
+    for (int i = 0; i < searchResult.length; i++) {
+      if (searchResult[i]["poster_path"] != null) {
         newResult.add(searchResult[i]);
       }
     }
@@ -141,8 +144,39 @@ class MoviesProvider extends ChangeNotifier {
     movieDetails = jsonDecode(response.body);
   }
 
-  getBanners() async{
+  getBanners() async {
     var response = await http.get(Uri.parse("$serverURL/banners"));
     banners = jsonDecode(response.body);
+  }
+
+  List playedMovies = [];
+
+  getContinueWatching() async {
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT " + Provider.of<UserProvider>(Get.context!, listen: false).token
+    };
+
+    var response =
+        await http.get(Uri.parse("$serverURL/history/"), headers: headers);
+    log(response.body);
+    continueWatching = jsonDecode(response.body);
+    playedMovies.clear();
+    for(var movie in continueWatching){
+      playedMovies.add(movie["movie"]["id"].toString());
+    }
+  }
+
+  createContinueWatching(String movieId) async {
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT " + Provider.of<UserProvider>(Get.context!, listen: false).token,
+      "Content-Type": "application/json"
+    };
+
+    Map<String, dynamic> body = {"movieId": movieId, "duration": "0"};
+
+    await http.post(Uri.parse("$serverURL/history/"),
+        headers: headers, body: jsonEncode(body));
   }
 }

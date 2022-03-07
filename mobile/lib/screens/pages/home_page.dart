@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 bool _loadingPopular = true;
 bool _loadingTopRated = true;
 bool _loadingBanners = true;
+bool _loadingRecentlyPlayed = true;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -108,6 +109,60 @@ class _HomePageState extends State<HomePage> {
                       ),
                       items: getBanners()),
               SizedBox(height: height * 0.04),
+              Provider.of<MoviesProvider>(context).continueWatching.isEmpty
+                  ? const SizedBox.shrink()
+                  : Column(children: [
+                      Row(
+                        children: [
+                          Icon(FeatherIcons.play, color: primaryColor),
+                          SizedBox(width: width * 0.02),
+                          Text(
+                            "Continue Watching",
+                            style: TextStyle(
+                              color: white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: height * 0.04),
+                      SizedBox(
+                        height: height * 0.2,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: Provider.of<MoviesProvider>(context,
+                                    listen: false)
+                                .continueWatching
+                                .length,
+                            itemBuilder: (context, index) {
+                              return Stack(children: [
+                                ThumbnailCard(
+                                    movieId:
+                                        Provider.of<MoviesProvider>(context)
+                                            .continueWatching[index]["movie"]
+                                                ["id"]
+                                            .toString(),
+                                    heroId: "${index}continue",
+                                    imageUrl:
+                                        "https://image.tmdb.org/t/p/w200" +
+                                            Provider.of<MoviesProvider>(context)
+                                                    .continueWatching[index]
+                                                ["movie"]["poster_path"]),
+                                                Positioned(
+                                                  bottom: 0,
+                                                  left:0,
+                                                  child: Container(
+                                                    color: primaryColor,
+                                                    width: width * 0.2,
+                                                    height: height * 0.005,
+                                                  ),
+                                                ),
+                              ]);
+                            }),
+                      ),
+                      SizedBox(height: height * 0.04),
+                    ]),
               Row(
                 children: [
                   Icon(FeatherIcons.users, color: primaryColor),
@@ -204,11 +259,18 @@ class _HomePageState extends State<HomePage> {
       _loadingPopular = true;
       _loadingTopRated = true;
       _loadingBanners = true;
+      _loadingRecentlyPlayed = true;
     });
 
     await Provider.of<MoviesProvider>(context, listen: false).getBanners();
     setState(() {
       _loadingBanners = false;
+    });
+
+    await Provider.of<MoviesProvider>(context, listen: false)
+        .getContinueWatching();
+    setState(() {
+      _loadingRecentlyPlayed = false;
     });
 
     await Provider.of<MoviesProvider>(context, listen: false).getPopular();
@@ -231,9 +293,13 @@ class _HomePageState extends State<HomePage> {
         InkWell(
           onTap: () {
             Get.to(() => MovieDetails(
-                  movieId: Provider.of<MoviesProvider>(context).banners[i]["movieId"],
-                  heroId: Provider.of<MoviesProvider>(context).banners[i]["movieId"],
-                  posterImage: "https://image.tmdb.org/t/p/w200" + Provider.of<MoviesProvider>(context).banners[i]["posterUrl"],
+                  movieId: Provider.of<MoviesProvider>(context).banners[i]
+                      ["movieId"],
+                  heroId: Provider.of<MoviesProvider>(context).banners[i]
+                      ["movieId"],
+                  posterImage: "https://image.tmdb.org/t/p/w200" +
+                      Provider.of<MoviesProvider>(context).banners[i]
+                          ["posterUrl"],
                 ));
           },
           child: SizedBox(

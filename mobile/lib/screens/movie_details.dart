@@ -18,6 +18,7 @@ import 'package:netflixclone/widgets/thumbnail_card.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_share/flutter_share.dart';
 
 bool _showReviews = false;
 bool _loading = true;
@@ -178,12 +179,38 @@ class _MovieDetailsState extends State<MovieDetails>
                         ],
                       ),
                       SizedBox(height: height * 0.03),
-                      LargeButton(
-                          onTap: () {
-                            Get.to(() => MovieVideoPlayer(_videoLink));
-                          },
-                          label: "PLAY",
-                          icon: FeatherIcons.play),
+                      Stack(children: [
+                        LargeButton(
+                            onTap: () {
+                              Provider.of<MoviesProvider>(context,
+                                      listen: false)
+                                  .createContinueWatching(widget.movieId);
+                              Get.to(() => MovieVideoPlayer(_videoLink));
+                            },
+                            label: Provider.of<MoviesProvider>(context)
+                                    .playedMovies
+                                    .contains(widget.movieId)
+                                ? "CONTINUE WATCHING"
+                                : "PLAY",
+                            icon: Provider.of<MoviesProvider>(context)
+                                    .playedMovies
+                                    .contains(widget.movieId)
+                                ? Icons.play_arrow
+                                : FeatherIcons.play),
+                        Provider.of<MoviesProvider>(context)
+                                .playedMovies
+                                .contains(widget.movieId)
+                            ? Positioned(
+                                bottom: 0,
+                                left: 0,
+                                child: Container(
+                                  color: white,
+                                  width: width * 0.2,
+                                  height: height * 0.005,
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ]),
                       SizedBox(height: height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -212,9 +239,8 @@ class _MovieDetailsState extends State<MovieDetails>
                                     Text(
                                       _isLiked ? "Liked" : "Like",
                                       style: TextStyle(
-                                          color: _isLiked
-                                              ? primaryColor
-                                              : white,
+                                          color:
+                                              _isLiked ? primaryColor : white,
                                           fontSize: 12.sp),
                                     ),
                                   ],
@@ -278,7 +304,16 @@ class _MovieDetailsState extends State<MovieDetails>
                           Expanded(
                             child: InkWell(
                               borderRadius: BorderRadius.circular(borderRadius),
-                              onTap: () {},
+                              onTap: () async {
+                                await FlutterShare.share(
+                                    title:
+                                        'Watch ${Provider.of<MoviesProvider>(context, listen: false).movieDetails["title"]} on Fliqxify',
+                                    text:
+                                        '\'${Provider.of<MoviesProvider>(context, listen: false).movieDetails["title"]}\' now streaming on Fliqxify!',
+                                    linkUrl:
+                                        'https://fliqxify.aqeelshamz.com/watch?m=' + widget.movieId,
+                                    chooserTitle: 'Choose an App to Share');
+                              },
                               child: Padding(
                                 padding: EdgeInsets.all(width * 0.02),
                                 child: Column(
