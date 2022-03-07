@@ -14,6 +14,7 @@ const usersRouter = require("./routes/users");
 const plansRouter = require("./routes/plans");
 const moviesRouter = require("./routes/movies");
 const bannersRouter = require("./routes/banners");
+const historyRouter = require("./routes/history");
 
 app.use(cors());
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use("/users", usersRouter);
 app.use("/plans", plansRouter);
 app.use("/movies", moviesRouter);
 app.use("/banners", bannersRouter);
+app.use("/history", historyRouter);
 
 app.listen(port, () => {
   console.log("Server started on port " + port);
