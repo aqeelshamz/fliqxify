@@ -14,7 +14,7 @@ router.get("/", validate, async (req, res) => {
     continueWatching.push({movie: response.data, duration: item.duration});
   }
 
-  return res.send(await History.find({ createdBy: req.user._id }));
+  return res.send(continueWatching);
 });
 
 router.post("/continue-watching", async (req, res) => {
