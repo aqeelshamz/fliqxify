@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const { validate } = require("../middlewares/validate");
 const joi = require("joi");
+const History = require("../models/History");
 
 router.get("/", validate, async (req, res) => {
-    console.log("got a request");
   return res.send(await History.find({ createdBy: req.user._id }));
 });
 
