@@ -2,8 +2,18 @@ const router = require("express").Router();
 const { validate } = require("../middlewares/validate");
 const joi = require("joi");
 const History = require("../models/History");
+const { default: axios } = require("axios");
 
 router.get("/", validate, async (req, res) => {
+  const history = await History.find({ createdBy: req.user._id });
+  const continueWatching = [];
+  for (const item of history) {
+    var response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${item.movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`
+    );
+    continueWatching.push({movie: response.data, duration: item.duration});
+  }
+
   return res.send(await History.find({ createdBy: req.user._id }));
 });
 
