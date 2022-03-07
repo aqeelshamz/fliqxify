@@ -2,7 +2,11 @@ const router = require("express").Router();
 const { validate } = require("../middlewares/validate");
 const joi = require("joi");
 
-router.post("/get-history", async (req, res) => {
+router.get("/", validate, async (req, res) => {
+  return res.send(await History.find({ createdBy: req.user._id }));
+});
+
+router.post("/continue-watching", async (req, res) => {
   const schema = joi.object({
     movieId: joi.string().required(),
   });
