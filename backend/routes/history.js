@@ -3,6 +3,7 @@ const { validate } = require("../middlewares/validate");
 const joi = require("joi");
 
 router.get("/", validate, async (req, res) => {
+    console.log("got a request");
   return res.send(await History.find({ createdBy: req.user._id }));
 });
 
