@@ -59,4 +59,19 @@ router.post("/", validate, async (req, res) => {
   }
 });
 
+router.post("/remove", validate, async (req, res)=>{
+  const schema = joi.object({
+    movieId: joi.string().required()
+  });
+
+  try{
+    const data = await schema.validateAsync(req.body);
+    await History.findOneAndDelete({movieId: data.movieId, createdBy: req.user._id});
+    return res.send("Removed!");
+  }
+  catch(err){
+    return res.status(500).send("Something went wrong");
+  }
+})
+
 module.exports = router;
