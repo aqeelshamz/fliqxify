@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movie_player_provider.dart';
+import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
 
 class MovieVideoPlayer extends StatefulWidget {
+  final String movieId;
   final String videoLink;
-  const MovieVideoPlayer(this.videoLink, {Key? key}) : super(key: key);
+  const MovieVideoPlayer(this.movieId, this.videoLink, {Key? key})
+      : super(key: key);
 
   @override
   _MovieVideoPlayerState createState() => _MovieVideoPlayerState();
@@ -22,18 +25,36 @@ class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
   void initState() {
     super.initState();
     BetterPlayerConfiguration betterPlayerConfiguration =
-        const BetterPlayerConfiguration(
-      aspectRatio: 16 / 9,
-      fit: BoxFit.fitWidth,
-      fullScreenByDefault: true,
-      autoPlay: true,
-      allowedScreenSleep: false,
-      controlsConfiguration: BetterPlayerControlsConfiguration(
-        enablePlayPause: false,
-        enableMute: true,
-        enableFullscreen: false,
-    ),
-    );
+        BetterPlayerConfiguration(
+            aspectRatio: 16 / 9,
+            fit: BoxFit.fitWidth,
+            fullScreenByDefault: true,
+            autoPlay: true,
+            allowedScreenSleep: false,
+            controlsConfiguration: const BetterPlayerControlsConfiguration(
+              enablePlayPause: false,
+              enableMute: true,
+              enableFullscreen: false,
+            ),
+            startAt: Provider.of<MoviesProvider>(context, listen: false).playedMovies.contains(widget.movieId) ? Duration(
+                hours: int.parse(Provider.of<MoviesProvider>(context, listen: false)
+                    .continueWatching[Provider.of<MoviesProvider>(context, listen: false)
+                        .playedMovies
+                        .indexOf(widget.movieId)]["duration"].toString()
+                    .split("#")[0]
+                    .split(":")[0]),
+                minutes: int.parse(Provider.of<MoviesProvider>(context, listen: false)
+                    .continueWatching[Provider.of<MoviesProvider>(context, listen: false)
+                        .playedMovies
+                        .indexOf(widget.movieId)]["duration"].toString()
+                    .split("#")[0]
+                    .split(":")[1]),
+                seconds: int.parse(Provider.of<MoviesProvider>(context, listen: false)
+                    .continueWatching[Provider.of<MoviesProvider>(context, listen: false)
+                        .playedMovies
+                        .indexOf(widget.movieId)]["duration"].toString()
+                    .split("#")[0]
+                    .split(":")[2].split(".")[0])) : null);
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       widget.videoLink == ""
@@ -52,11 +73,23 @@ class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: BetterPlayer(
-          controller: _betterPlayerController!,
+    return WillPopScope(
+      onWillPop: () async {
+        var position =
+            await _betterPlayerController?.videoPlayerController?.position;
+        var totalDuration = _betterPlayerController
+            ?.videoPlayerController?.bufferingConfiguration.maxBufferMs;
+        Provider.of<MoviesProvider>(context, listen: false)
+            .createContinueWatching(widget.movieId,
+                "${position.toString()}#${totalDuration.toString()}");
+        return true;
+      },
+      child: Scaffold(
+        body: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: BetterPlayer(
+            controller: _betterPlayerController!,
+          ),
         ),
       ),
     );

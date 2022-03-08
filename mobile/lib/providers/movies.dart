@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/utils/api.dart';
+import 'package:netflixclone/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class MoviesProvider extends ChangeNotifier {
@@ -159,24 +161,38 @@ class MoviesProvider extends ChangeNotifier {
 
     var response =
         await http.get(Uri.parse("$serverURL/history/"), headers: headers);
-    log(response.body);
     continueWatching = jsonDecode(response.body);
     playedMovies.clear();
-    for(var movie in continueWatching){
+    for (var movie in continueWatching) {
       playedMovies.add(movie["movie"]["id"].toString());
     }
+    notifyListeners();
   }
 
-  createContinueWatching(String movieId) async {
+  createContinueWatching(String movieId, String duration) async {
     Map<String, String> headers = {
       "Authorization":
           "JWT " + Provider.of<UserProvider>(Get.context!, listen: false).token,
       "Content-Type": "application/json"
     };
 
-    Map<String, dynamic> body = {"movieId": movieId, "duration": "0"};
-
+    Map<String, dynamic> body = {"movieId": movieId, "duration": duration};
     await http.post(Uri.parse("$serverURL/history/"),
         headers: headers, body: jsonEncode(body));
+    getContinueWatching();
+  }
+
+  removeContinueWatching(String movieId)async{
+    Map<String, String> headers = {
+      "Authorization":
+          "JWT " + Provider.of<UserProvider>(Get.context!, listen: false).token,
+      "Content-Type": "application/json"
+    };
+
+    Map<String, dynamic> body = {"movieId": movieId};
+    await http.post(Uri.parse("$serverURL/history/remove"),
+        headers: headers, body: jsonEncode(body));
+    getContinueWatching();
+    Fluttertoast.showToast(msg: "Removed!", backgroundColor: primaryColor);
   }
 }

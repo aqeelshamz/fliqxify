@@ -19,6 +19,7 @@ import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_share/flutter_share.dart';
+import 'package:duration/duration.dart';
 
 bool _showReviews = false;
 bool _loading = true;
@@ -182,10 +183,7 @@ class _MovieDetailsState extends State<MovieDetails>
                       Stack(children: [
                         LargeButton(
                             onTap: () {
-                              Provider.of<MoviesProvider>(context,
-                                      listen: false)
-                                  .createContinueWatching(widget.movieId);
-                              Get.to(() => MovieVideoPlayer(_videoLink));
+                              Get.to(() => MovieVideoPlayer(widget.movieId, _videoLink));
                             },
                             label: Provider.of<MoviesProvider>(context)
                                     .playedMovies
@@ -205,7 +203,7 @@ class _MovieDetailsState extends State<MovieDetails>
                                 left: 0,
                                 child: Container(
                                   color: white,
-                                  width: width * 0.2,
+                                  width: (width / 100) * (parseTime(Provider.of<MoviesProvider>(context).continueWatching[Provider.of<MoviesProvider>(context).playedMovies.indexOf(widget.movieId)]["duration"].split("#")[0]).inMilliseconds / int.parse(Provider.of<MoviesProvider>(context).continueWatching[Provider.of<MoviesProvider>(context).playedMovies.indexOf(widget.movieId)]["duration"].split("#")[1]) * 100),
                                   height: height * 0.005,
                                 ),
                               )

@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -136,29 +137,100 @@ class _HomePageState extends State<HomePage> {
                                 .continueWatching
                                 .length,
                             itemBuilder: (context, index) {
-                              return Stack(children: [
-                                ThumbnailCard(
-                                    movieId:
-                                        Provider.of<MoviesProvider>(context)
-                                            .continueWatching[index]["movie"]
-                                                ["id"]
-                                            .toString(),
-                                    heroId: "${index}continue",
-                                    imageUrl:
-                                        "https://image.tmdb.org/t/p/w200" +
-                                            Provider.of<MoviesProvider>(context)
-                                                    .continueWatching[index]
-                                                ["movie"]["poster_path"]),
-                                                Positioned(
-                                                  bottom: 0,
-                                                  left:0,
-                                                  child: Container(
-                                                    color: primaryColor,
-                                                    width: width * 0.2,
-                                                    height: height * 0.005,
-                                                  ),
+                              return GestureDetector(
+                                onLongPress: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          backgroundColor: grey,
+                                          content: Text(
+                                            "Remove from Continue Watching?",
+                                            style: TextStyle(
+                                              color: white,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: Text(
+                                                "Cancel",
+                                                style: TextStyle(
+                                                  color: white,
                                                 ),
-                              ]);
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor: grey2),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Provider.of<MoviesProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .removeContinueWatching(Provider
+                                                            .of<MoviesProvider>(
+                                                                context,
+                                                                listen: false)
+                                                        .continueWatching[index]
+                                                            ["movie"]["id"]
+                                                        .toString());
+                                                Get.back();
+                                              },
+                                              child: Text(
+                                                "Remove",
+                                                style: TextStyle(
+                                                  color: white,
+                                                ),
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      primaryColor),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: Stack(children: [
+                                  ThumbnailCard(
+                                      movieId:
+                                          Provider.of<MoviesProvider>(context)
+                                              .continueWatching[index]["movie"]
+                                                  ["id"]
+                                              .toString(),
+                                      heroId: "${index}continue",
+                                      imageUrl:
+                                          "https://image.tmdb.org/t/p/w200" +
+                                              Provider.of<MoviesProvider>(
+                                                          context)
+                                                      .continueWatching[index]
+                                                  ["movie"]["poster_path"]),
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    child: Container(
+                                      color: primaryColor,
+                                      width: ((width * 0.3) / 100) *
+                                          (parseTime(Provider.of<
+                                                              MoviesProvider>(
+                                                          context)
+                                                      .continueWatching[index]
+                                                          ["duration"]
+                                                      .split("#")[0])
+                                                  .inMilliseconds /
+                                              int.parse(
+                                                  Provider.of<MoviesProvider>(
+                                                          context)
+                                                      .continueWatching[index]
+                                                          ["duration"]
+                                                      .split("#")[1]) *
+                                              100),
+                                      height: height * 0.005,
+                                    ),
+                                  ),
+                                ]),
+                              );
                             }),
                       ),
                       SizedBox(height: height * 0.04),
