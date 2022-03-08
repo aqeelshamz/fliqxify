@@ -40,13 +40,20 @@ router.post("/", validate, async (req, res) => {
 
   try {
     const data = await schema.validateAsync(req.body);
-    const newHistory = new History({
-      movieId: data.movieId,
-      duration: data.duration,
-      createdBy: req.user._id,
-    });
+    const exist = await History.findOne({movieId : data.movieId});
 
-    return res.send(await newHistory.save());
+    if(exist){
+      return res.send(await History.findOneAndUpdate({movieId: data.movieId}, {duration: data.duration}));
+    }
+    else{
+      const newHistory = new History({
+        movieId: data.movieId,
+        duration: data.duration,
+        createdBy: req.user._id,
+      });
+  
+      return res.send(await newHistory.save());
+    }
   } catch (err) {
     return res.status(500).send("Something went wrong");
   }
