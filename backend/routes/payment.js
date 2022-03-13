@@ -1,9 +1,8 @@
 const router = require("express").Router();
-const { validate } = require("../middlewares/validate");
 const joi = require("joi");
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
-router.post("/get-client-secret", validate, async (req, res) => {
+router.post("/get-client-secret", async (req, res) => {
   const schema = joi.object({
     amount: joi.number().required(),
     currency: joi.string().required(),
