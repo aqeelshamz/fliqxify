@@ -30,12 +30,14 @@ dependencies:
   better_player: ^0.0.81
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
+  dio: ^4.0.4
   duration: ^3.0.11
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
   flutter_screenutil: ^5.0.0+2
   flutter_share: ^2.0.0
+  flutter_stripe: ^2.3.0
   fluttertoast: ^8.0.8
   get: ^4.3.8
   google_fonts: ^2.1.0

@@ -4,6 +4,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:netflixclone/providers/payment_provider.dart';
 import 'package:netflixclone/screens/add_profile.dart';
 import 'package:netflixclone/screens/home.dart';
 import 'package:netflixclone/screens/signin.dart';
@@ -13,6 +14,7 @@ import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
 import 'package:netflixclone/widgets/large_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 int _selectedPlan = -1;
 List _plans = [];
@@ -72,7 +74,7 @@ class _PlansState extends State<Plans> {
                           return InkWell(
                             onTap: () {
                               setState(() {
-                                _selectedPlan = _plans[index]["id"];
+                                _selectedPlan = index;
                               });
                             },
                             borderRadius:
@@ -87,7 +89,7 @@ class _PlansState extends State<Plans> {
                               margin: EdgeInsets.all(width * 0.02),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: _selectedPlan == _plans[index]["id"]
+                                  color: _selectedPlan == index
                                       ? primaryColor
                                       : grey1,
                                   width: 3,
@@ -157,7 +159,7 @@ class _PlansState extends State<Plans> {
                       padding: EdgeInsets.only(top: height * 0.02),
                       child: LargeButton(
                         onTap: () {
-                          register();
+                          pay();
                         },
                         label: "CONTINUE TO PAYMENT",
                       ),
@@ -169,13 +171,25 @@ class _PlansState extends State<Plans> {
     );
   }
 
+  void pay() async {
+    bool paymentStatus =
+        await Provider.of<PaymentProvider>(context, listen: false)
+            .processPayment(_plans[_selectedPlan]["price"]);
+    if (paymentStatus) {
+      register();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Something went wrong!",
+          backgroundColor: primaryColor,
+          toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
   void register() async {
     setState(() {
       _loading = true;
     });
-    Map<String, String> headers = {
-      "Content-Type"  : "application/json"
-    };
+    Map<String, String> headers = {"Content-Type": "application/json"};
 
     Map<String, dynamic> body = {
       "name": widget.fullName,
@@ -193,15 +207,16 @@ class _PlansState extends State<Plans> {
       _loading = false;
     });
 
-    if(response.statusCode == 200){
-      Fluttertoast.showToast(msg: "Registration Successful!", backgroundColor: primaryColor);
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Registration Successful!", backgroundColor: primaryColor);
       Get.offAll(() => const SignIn());
-    }
-    else if (response.statusCode == 401){
-      Fluttertoast.showToast(msg: "Email already used!", backgroundColor: errorRed);
-    }
-    else{
-      Fluttertoast.showToast(msg: "Something went wrong", backgroundColor: errorRed);
+    } else if (response.statusCode == 401) {
+      Fluttertoast.showToast(
+          msg: "Email already used!", backgroundColor: errorRed);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Something went wrong", backgroundColor: errorRed);
     }
   }
 
@@ -238,6 +253,4 @@ class _PlansState extends State<Plans> {
     }
     return widgets;
   }
-
-  
 }
