@@ -43,7 +43,7 @@ router.post("/", validate, async (req, res) => {
     const exist = await History.findOne({movieId : data.movieId});
 
     if(exist){
-      return res.send(await History.findOneAndUpdate({movieId: data.movieId}, {duration: data.duration}));
+      return res.send(await History.findOneAndUpdate({movieId: data.movieId, createdBy: req.user._id}, {duration: data.duration}));
     }
     else{
       const newHistory = new History({
