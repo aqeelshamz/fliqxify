@@ -54,12 +54,12 @@ router.post("/", validate, async (req, res) => {
     var dataDuration = data.duration;
 
     if(exist){
-      return res.send(await History.findOneAndUpdate({movieId: data.movieId, createdBy: req.user._id}, {duration: dataDuration.split("#")[0] + duration}));
+      return res.send(await History.findOneAndUpdate({movieId: data.movieId, createdBy: req.user._id}, {duration: dataDuration.split("#")[0] + "#" + duration}));
     }
     else{
       const newHistory = new History({
         movieId: data.movieId,
-        duration: dataDuration.split("#")[0] + duration,
+        duration: dataDuration.split("#")[0] + "#" + duration,
         createdBy: req.user._id,
       });
   
