@@ -284,6 +284,7 @@ router.post("/get-download-url", validate, async (req, res)=>{
   try{
     const data = await schema.validateAsync(req.body);
     const movie = await Movie.findById(data.movieId);
+    if(!movie) return res.status(404).send("File not found");
     const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
     return res.send({
       url: url,
