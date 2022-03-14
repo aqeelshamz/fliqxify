@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:netflixclone/providers/movies.dart';
@@ -33,15 +34,15 @@ class _GetStartedState extends State<GetStarted> {
                 enlargeCenterPage: false,
                 autoPlay: true,
               ),
-              items: 
-                  Provider.of<MoviesProvider>(context).posterUrls.map((item) => Container(
+              items: Provider.of<MoviesProvider>(context)
+                  .posterUrls
+                  .map((item) => Container(
                         child: Center(
-                            child: Image.network(
-                          item,
-                          fit: BoxFit.cover,
-                          height: height,
-                          width: width,
-                        )),
+                            child: CachedNetworkImage(
+                                imageUrl: item,
+                                fit: BoxFit.cover,
+                                height: height,
+                                width: width)),
                       ))
                   .toList(),
             ),

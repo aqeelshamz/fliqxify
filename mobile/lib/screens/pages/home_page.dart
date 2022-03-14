@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
@@ -375,8 +376,8 @@ class _HomePageState extends State<HomePage> {
                 ));
           },
           child: SizedBox(
-            child: Image.network(
-              Provider.of<MoviesProvider>(context).banners[i]["imageUrl"],
+            child: CachedNetworkImage(
+              imageUrl: Provider.of<MoviesProvider>(context).banners[i]["imageUrl"],
               fit: BoxFit.cover,
             ),
           ),

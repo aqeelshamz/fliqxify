@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netflixclone/providers/downloads_provider.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
+import 'package:provider/provider.dart';
 
 List downloads = [];
 
@@ -32,7 +34,7 @@ class _DownloadsState extends State<Downloads> {
           height: height * 0.04,
         ),
         Expanded(
-          child: downloads.isEmpty
+          child: Provider.of<DownloadsProvider>(context).data.keys.isEmpty
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +60,7 @@ class _DownloadsState extends State<Downloads> {
                 )
               : ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: 8,
+                  itemCount: Provider.of<DownloadsProvider>(context).data.keys.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {},
@@ -72,7 +74,7 @@ class _DownloadsState extends State<Downloads> {
                               borderRadius:
                                   BorderRadius.circular(borderRadius * 2),
                               child: Image.network(
-                                  "https://raw.githubusercontent.com/aqeelshamz/projects-src/main/Rectangle%202.3%20(2).png",
+                                  "https://image.tmdb.org/t/p/w200" + Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["poster"],
                                   width: width * 0.3,
                                   height: height * 0.1,
                                   fit: BoxFit.cover),
@@ -83,12 +85,12 @@ class _DownloadsState extends State<Downloads> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Glow EP 1",
+                                    Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["title"],
                                     style: TextStyle(
                                         color: white, fontSize: 15.sp),
                                   ),
                                   Text(
-                                    "512 MB",
+                                    (int.parse(Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["totalSize"].toString()) / 1000000).floor().toString() + " MB",
                                     style: TextStyle(
                                         color: white, fontSize: 12.sp),
                                   ),

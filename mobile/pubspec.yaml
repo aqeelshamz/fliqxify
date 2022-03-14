@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   better_player: ^0.0.81
+  cached_network_image: ^3.2.0
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
   dio: ^4.0.4
@@ -44,6 +45,7 @@ dependencies:
   http: ^0.13.4
   like_button: ^2.0.3
   lottie: ^1.2.1
+  path_provider: ^2.0.9
   provider: ^5.0.0
   shared_preferences: ^2.0.12
   youtube_player_flutter: ^8.0.0

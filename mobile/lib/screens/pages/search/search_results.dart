@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 bool _searchingMovie = false;
 String _keyword = "";
+TextEditingController _controller = TextEditingController();
 
 class SearchResults extends StatefulWidget {
   final String keyword;
@@ -25,6 +26,7 @@ class _SearchResultsState extends State<SearchResults> {
     super.initState();
     searchMovie(widget.keyword);
     setState(() {
+      _controller.text = widget.keyword;
       _keyword = "";
     });
   }
@@ -41,6 +43,7 @@ class _SearchResultsState extends State<SearchResults> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
+                controller: _controller,
                 textInputAction: TextInputAction.search,
                 onFieldSubmitted: (text) {
                   searchMovie(text);

@@ -131,7 +131,7 @@ class _PlansState extends State<Plans> {
                                   ),
                                 ),
                                 Text(
-                                  _plans[index]["month"].toString(),
+                                  (_plans[index]["month"] >= 12 ? (_plans[index]["month"] / 12).toInt().toString() : _plans[index]["month"].toString()) + (_plans[index]["month"].toString() == "12" ? " year" : (" month" + (_plans[index]["month"].toString() != "1" ? "s" : ""))),
                                   style: TextStyle(
                                     color: white,
                                     fontSize: 12.sp,

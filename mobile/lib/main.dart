@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:netflixclone/providers/bottom_navigation.dart';
+import 'package:netflixclone/providers/downloads_provider.dart';
 import 'package:netflixclone/providers/movie_player_provider.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/payment_provider.dart';
@@ -30,6 +31,7 @@ class App extends StatelessWidget {
           ChangeNotifierProvider<MoviesProvider>(create: (_) => MoviesProvider()),
           ChangeNotifierProvider<MoviePlayerProvider>(create: (_) => MoviePlayerProvider()),
           ChangeNotifierProvider<PaymentProvider>(create: (_) => PaymentProvider()),
+          ChangeNotifierProvider<DownloadsProvider>(create: (_) => DownloadsProvider()),
         ],
         child: Builder(
           builder: (context) => GetMaterialApp(

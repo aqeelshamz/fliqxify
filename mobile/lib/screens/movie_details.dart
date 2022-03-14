@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:netflixclone/providers/downloads_provider.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/movie_video_player.dart';
@@ -77,8 +79,8 @@ class _MovieDetailsState extends State<MovieDetails>
       children: [
         Stack(
           children: [
-            Image.network(
-              widget.posterImage.replaceAll("w200", "original"),
+            CachedNetworkImage(
+              imageUrl: widget.posterImage.replaceAll("w200", "original"),
               width: width,
               height: height * 0.3,
               fit: BoxFit.cover,
@@ -183,7 +185,8 @@ class _MovieDetailsState extends State<MovieDetails>
                       Stack(children: [
                         LargeButton(
                             onTap: () {
-                              Get.to(() => MovieVideoPlayer(widget.movieId, _videoLink));
+                              Get.to(() =>
+                                  MovieVideoPlayer(widget.movieId, _videoLink));
                             },
                             label: Provider.of<MoviesProvider>(context)
                                     .playedMovies
@@ -203,7 +206,20 @@ class _MovieDetailsState extends State<MovieDetails>
                                 left: 0,
                                 child: Container(
                                   color: white,
-                                  width: (width / 100) * (parseTime(Provider.of<MoviesProvider>(context).continueWatching[Provider.of<MoviesProvider>(context).playedMovies.indexOf(widget.movieId)]["duration"].split("#")[0]).inMilliseconds / int.parse(Provider.of<MoviesProvider>(context).continueWatching[Provider.of<MoviesProvider>(context).playedMovies.indexOf(widget.movieId)]["duration"].split("#")[1]) * 100),
+                                  width: (width / 100) *
+                                      (parseTime(Provider.of<MoviesProvider>(context)
+                                                  .continueWatching[Provider.of<MoviesProvider>(context)
+                                                          .playedMovies
+                                                          .indexOf(widget.movieId)]
+                                                      ["duration"]
+                                                  .split("#")[0])
+                                              .inMilliseconds /
+                                          int.parse(Provider.of<MoviesProvider>(context)
+                                              .continueWatching[Provider.of<MoviesProvider>(context)
+                                                  .playedMovies
+                                                  .indexOf(widget.movieId)]["duration"]
+                                              .split("#")[1]) *
+                                          100),
                                   height: height * 0.005,
                                 ),
                               )
@@ -281,18 +297,88 @@ class _MovieDetailsState extends State<MovieDetails>
                           Expanded(
                             child: InkWell(
                               borderRadius: BorderRadius.circular(borderRadius),
-                              onTap: () {},
+                              onTap: () {
+                                Provider.of<DownloadsProvider>(context,
+                                        listen: false)
+                                    .downloadMovie(widget.movieId);
+                              },
                               child: Padding(
                                 padding: EdgeInsets.all(width * 0.02),
                                 child: Column(
                                   children: [
-                                    Icon(FeatherIcons.download,
-                                        color: white, size: 24.sp),
+                                    Provider.of<DownloadsProvider>(context)
+                                                .data
+                                                .keys
+                                                .contains(widget.movieId) &&
+                                            Provider.of<DownloadsProvider>(
+                                                            context)
+                                                        .data[widget.movieId]
+                                                    ["percentage"] <
+                                                100
+                                        ? SizedBox(
+                                            height: Provider.of<DownloadsProvider>(
+                                                            context)
+                                                        .data[widget.movieId]?
+                                                    ["percentage"] < 100 ? height * 0.035 : null,
+                                            child: Stack(
+                                              children: [
+                                                Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: double.parse(Provider
+                                                                .of<DownloadsProvider>(
+                                                                    context)
+                                                            .data[
+                                                                widget.movieId]
+                                                                ["percentage"]
+                                                            .toString()) /
+                                                        100,
+                                                    valueColor:
+                                                        const AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Colors.white),
+                                                    strokeWidth: 2.5,
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    Provider.of<DownloadsProvider>(
+                                                                context)
+                                                            .data[
+                                                                widget.movieId]
+                                                                ["percentage"]
+                                                            .toString() +
+                                                        "%",
+                                                    style: TextStyle(
+                                                      color: white,
+                                                      fontSize: 8.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Provider.of<DownloadsProvider>(
+                                                    context)
+                                                .downloadingMovies
+                                                .contains(widget.movieId)
+                                            ? const CircularProgressIndicator()
+                                            : Icon(FeatherIcons.download,
+                                                color: Provider.of<DownloadsProvider>(
+                                                            context)
+                                                        .data[widget.movieId]?
+                                                    ["percentage"] == 100 ? primaryColor : white, size: 24.sp),
                                     SizedBox(height: height * 0.005),
                                     Text(
-                                      "Download",
+                                      Provider.of<DownloadsProvider>(
+                                                            context)
+                                                        .data[widget.movieId]?
+                                                    ["percentage"] == 100 ? "Downloaded" : "Download",
                                       style: TextStyle(
-                                          color: white, fontSize: 12.sp),
+                                          color: white, fontSize: Provider.of<DownloadsProvider>(
+                                                            context)
+                                                        .data[widget.movieId]?
+                                                    ["percentage"] == 100 ? 10.5.sp : 12.sp),
                                     ),
                                   ],
                                 ),
@@ -309,7 +395,8 @@ class _MovieDetailsState extends State<MovieDetails>
                                     text:
                                         '\'${Provider.of<MoviesProvider>(context, listen: false).movieDetails["title"]}\' now streaming on Fliqxify!',
                                     linkUrl:
-                                        'https://fliqxify.aqeelshamz.com/watch?m=' + widget.movieId,
+                                        'https://fliqxify.aqeelshamz.com/watch?m=' +
+                                            widget.movieId,
                                     chooserTitle: 'Choose an App to Share');
                               },
                               child: Padding(
