@@ -131,7 +131,19 @@ class _PlansState extends State<Plans> {
                                   ),
                                 ),
                                 Text(
-                                  (_plans[index]["month"] >= 12 ? (_plans[index]["month"] / 12).toInt().toString() : _plans[index]["month"].toString()) + (_plans[index]["month"].toString() == "12" ? " year" : (" month" + (_plans[index]["month"].toString() != "1" ? "s" : ""))),
+                                  (_plans[index]["month"] >= 12
+                                          ? (_plans[index]["month"] / 12)
+                                              .toInt()
+                                              .toString()
+                                          : _plans[index]["month"].toString()) +
+                                      (_plans[index]["month"].toString() == "12"
+                                          ? " year"
+                                          : (" month" +
+                                              (_plans[index]["month"]
+                                                          .toString() !=
+                                                      "1"
+                                                  ? "s"
+                                                  : ""))),
                                   style: TextStyle(
                                     color: white,
                                     fontSize: 12.sp,
@@ -155,14 +167,38 @@ class _PlansState extends State<Plans> {
               ),
               _selectedPlan == -1 || _loading
                   ? const SizedBox.shrink()
-                  : Padding(
-                      padding: EdgeInsets.only(top: height * 0.02),
-                      child: LargeButton(
-                        onTap: () {
-                          pay();
-                        },
-                        label: "CONTINUE TO PAYMENT",
-                      ),
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: height * 0.02),
+                          child: LargeButton(
+                            onTap: () {
+                              pay();
+                            },
+                            label: "CONTINUE TO PAYMENT",
+                          ),
+                        ),
+                        SizedBox(
+                          width: width,
+                          child: TextButton(
+                            child: Text(
+                              "SKIP",
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            onPressed: () {
+                              register();
+                            },
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: height * 0.015),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
             ],
           ),
