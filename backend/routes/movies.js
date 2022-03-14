@@ -276,4 +276,23 @@ router.get("/my-watchlist", validate, async (req, res) => {
   return res.send(watchlistMovies);
 });
 
+router.post("/get-download-url", validate, async (req, res)=>{
+  const schema = joi.object({
+    movieId: joi.string().required(),
+  });
+
+  try{
+    const data = await schema.validateAsync(req.body);
+    const movie = await Movie.findById(data.movieId);
+    const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
+    return res.send({
+      url: url,
+      fileName : movie.movieFile
+    });
+  }
+  catch(err){
+    return res.status(500).send("Something went wrong");
+  }
+})
+
 module.exports = router;
