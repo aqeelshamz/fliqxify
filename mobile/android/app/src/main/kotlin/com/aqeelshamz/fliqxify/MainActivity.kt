@@ -1,4 +1,4 @@
-package com.example.netflixclone
+package com.aqeelshamz.fliqxify
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity
