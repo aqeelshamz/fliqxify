@@ -127,7 +127,7 @@ router.post("/like-review", validate, async (req, res) => {
 
     return res.send("Like updated");
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 });
@@ -267,7 +267,9 @@ router.get("/my-watchlist", validate, async (req, res) => {
   console.log(user);
   let watchlistMovies = [];
   for (const movieId of user.watchlist) {
-    var response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`);
+    var response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`
+    );
     watchlistMovies.push(response.data);
   }
 
@@ -276,29 +278,30 @@ router.get("/my-watchlist", validate, async (req, res) => {
   return res.send(watchlistMovies);
 });
 
-router.post("/get-download-url", validate, async (req, res)=>{
+router.post("/get-download-url", validate, async (req, res) => {
   const schema = joi.object({
     movieId: joi.string().required(),
   });
 
-  try{
+  try {
     const data = await schema.validateAsync(req.body);
-    const movie = await Movie.findOne({movieId: data.movieId});
-    var movieData = await axios.get(`https://api.themoviedb.org/3/movie/${data.movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`);
-    console.log(movieData)
-    if(!movie) return res.status(404).send("File not found");
+    const movie = await Movie.findOne({ movieId: data.movieId });
+    var movieData = await axios.get(
+      `https://api.themoviedb.org/3/movie/${data.movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`
+    );
+    console.log(movieData);
+    if (!movie) return res.status(404).send("File not found");
     const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
     return res.send({
+      title: movieData.title,
+      poster: movieData.poster_path,
       movieId: data.movieId,
       url: url,
-      fileName : movie.movieFile,
-      title: movieData.title,
-      poster: movieData.poster_path 
+      fileName: movie.movieFile,
     });
-  }
-  catch(err){
+  } catch (err) {
     return res.status(500).send("Something went wrong");
   }
-})
+});
 
 module.exports = router;
