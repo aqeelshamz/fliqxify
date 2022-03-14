@@ -55,6 +55,7 @@ router.post("/", validate, async (req, res) => {
       return res.send(await newHistory.save());
     }
   } catch (err) {
+    console.log(err)
     return res.status(500).send("Something went wrong");
   }
 });
