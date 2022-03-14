@@ -284,11 +284,15 @@ router.post("/get-download-url", validate, async (req, res)=>{
   try{
     const data = await schema.validateAsync(req.body);
     const movie = await Movie.findOne({movieId: data.movieId});
+    var movieData = await axios.get(`https://api.themoviedb.org/3/movie/${data.movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`);
     if(!movie) return res.status(404).send("File not found");
     const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
     return res.send({
+      movieId: data.movieId,
       url: url,
-      fileName : movie.movieFile
+      fileName : movie.movieFile,
+      title: movieData.title,
+      poster: movieData.poster_path 
     });
   }
   catch(err){
