@@ -292,6 +292,7 @@ router.post("/get-download-url", validate, async (req, res)=>{
     });
   }
   catch(err){
+    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 })
