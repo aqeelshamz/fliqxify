@@ -3,7 +3,6 @@ const app = express();
 const port = process.env.PORT || 3030;
 require("dotenv").config();
 const cors = require("cors");
-
 const mongoose = require("mongoose");
 
 mongoose.connect(process.env.DB_URL, (err) => {

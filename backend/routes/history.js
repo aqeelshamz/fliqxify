@@ -3,6 +3,8 @@ const { validate } = require("../middlewares/validate");
 const joi = require("joi");
 const History = require("../models/History");
 const { default: axios } = require("axios");
+const Movie = require("../models/Movie");
+const { getVideoDurationInSeconds } = require('get-video-duration')
 
 router.get("/", validate, async (req, res) => {
   const history = await History.find({ createdBy: req.user._id });
@@ -42,8 +44,17 @@ router.post("/", validate, async (req, res) => {
     const data = await schema.validateAsync(req.body);
     const exist = await History.findOne({movieId : data.movieId});
 
+    const movie = await Movie.findOne({movieId: data.movieId});
+
+    var duration = await getVideoDurationInSeconds(
+      'https://fliqxify-backend.aqeelshamz.com/' + movie.movieFile
+    );
+
+    console.log("duration", duration);
+    var dataDuration = data.duration;
+
     if(exist){
-      return res.send(await History.findOneAndUpdate({movieId: data.movieId, createdBy: req.user._id}, {duration: data.duration}));
+      return res.send(await History.findOneAndUpdate({movieId: data.movieId, createdBy: req.user._id}, {duration: dataDuration.split("#")[0] + duration}));
     }
     else{
       const newHistory = new History({
