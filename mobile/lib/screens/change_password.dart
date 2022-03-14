@@ -23,6 +23,14 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
   @override
+  void initState() {
+    setState(() {
+      _showPassword = false;
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -46,7 +54,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               SizedBox(height: height * 0.03),
               TextField(
                 autofocus: true,
-                obscureText: _showPassword,
+                obscureText: !_showPassword,
                 decoration: InputDecoration(
                   fillColor: grey1,
                   filled: true,
@@ -56,7 +64,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       EdgeInsets.symmetric(horizontal: width * 0.04),
                   suffixIcon: IconButton(
                     icon: Icon(
-                        !_showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
+                        _showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
                         color: grey3),
                     onPressed: () {
                       setState(() {
@@ -82,7 +90,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               ),
               SizedBox(height: height * 0.02),
               TextField(
-                obscureText: _showPassword,
+                obscureText: !_showPassword,
                 decoration: InputDecoration(
                   fillColor: grey1,
                   filled: true,
@@ -92,7 +100,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       EdgeInsets.symmetric(horizontal: width * 0.04),
                   suffixIcon: IconButton(
                     icon: Icon(
-                        !_showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
+                        _showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
                         color: grey3),
                     onPressed: () {
                       setState(() {
