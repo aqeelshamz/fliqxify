@@ -2,9 +2,6 @@
 // If you want to modify your application's content, start in "index.js"
 
 import {ReactInstance} from 'react-360-web';
-import SimpleRaycaster from 'simple-raycaster';
-import WebVRPolyfill from "webvr-polyfill";
-const polyfill = new WebVRPolyfill();
 
 function init(bundle, parent, options = {}) {
   const r360 = new ReactInstance(bundle, parent, {
@@ -12,10 +9,6 @@ function init(bundle, parent, options = {}) {
     fullScreen: true,
     ...options,
   });
-
-  console.log(r360._cameraPosition)
-
-  console.log(r360._cameraPosition)
   // r360.scene.rotateY(210)
   r360.scene.rotateY(-1.5)
 
@@ -30,8 +23,6 @@ function init(bundle, parent, options = {}) {
 
   // Load the initial environment
   r360.compositor.setBackground(r360.getAssetURL('dark_theatre.jpg'));
-  r360.controls.clearRaycasters();
-  r360.controls.addRaycaster(SimpleRaycaster);
 }
 
 window.React360 = {init};
