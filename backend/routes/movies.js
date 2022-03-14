@@ -291,6 +291,7 @@ router.post("/get-download-url", validate, async (req, res) => {
     );
     if (!movie) return res.status(404).send("File not found");
     const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
+    console.log(movieData);
     console.log(movieData.title);
     console.log(movieData.poster_path);
     return res.json({
