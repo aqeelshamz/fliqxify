@@ -48,7 +48,7 @@ router.post("/", validate, async (req, res) => {
 
     var duration = await getVideoDurationInSeconds(
       'https://fliqxify-backend.aqeelshamz.com/' + movie.movieFile
-    );
+    ) * 1000;
 
     console.log("duration", duration);
     var dataDuration = data.duration;
@@ -59,7 +59,7 @@ router.post("/", validate, async (req, res) => {
     else{
       const newHistory = new History({
         movieId: data.movieId,
-        duration: data.duration,
+        duration: dataDuration.split("#")[0] + duration,
         createdBy: req.user._id,
       });
   
