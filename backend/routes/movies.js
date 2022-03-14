@@ -289,16 +289,9 @@ router.post("/get-download-url", validate, async (req, res) => {
     var movieData = await axios.get(
       `https://api.themoviedb.org/3/movie/${data.movieId}?api_key=3794a566770835ffed011b687794a132&language=en-US`
     );
-    console.log(movieData);
     if (!movie) return res.status(404).send("File not found");
     const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
-    return res.json({
-      title: movieData.title,
-      poster: movieData.poster_path,
-      movieId: data.movieId,
-      url: url,
-      fileName: movie.movieFile,
-    });
+    return res.send("sss");
   } catch (err) {
     return res.status(500).send("Something went wrong");
   }
