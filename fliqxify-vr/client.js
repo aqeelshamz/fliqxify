@@ -9,16 +9,13 @@ function init(bundle, parent, options = {}) {
     fullScreen: true,
     ...options,
   });
-  // r360.scene.rotateY(210)
+
   r360.scene.rotateY(-1.5)
-
-
-  var surf = r360.getDefaultSurface();
 
   // Render your app content to the default cylinder surface
   r360.renderToSurface(
     r360.createRoot('fliqxify_vr', { /* initial props */ }),
-    surf
+    r360.getDefaultSurface()
   );
 
   // Load the initial environment
