@@ -10,6 +10,7 @@ import 'package:netflixclone/providers/downloads_provider.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/movie_video_player.dart';
+import 'package:netflixclone/screens/vr_webview.dart';
 import 'package:netflixclone/screens/youtube_player.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
@@ -226,6 +227,42 @@ class _MovieDetailsState extends State<MovieDetails>
                             : const SizedBox.shrink(),
                       ]),
                       SizedBox(height: height * 0.02),
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.vrpano_outlined,
+                                      color: primaryColor),
+                                  SizedBox(
+                                    width: width * 0.02,
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "WATCH IN VR",
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            Get.to(()=> const VRWebView());
+                          },
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              padding:
+                                  EdgeInsets.symmetric(vertical: height * 0.02),
+                              side: BorderSide(color: primaryColor)),
+                        ),
+                      ),
+                      SizedBox(height: height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -310,16 +347,20 @@ class _MovieDetailsState extends State<MovieDetails>
                                                 .data
                                                 .keys
                                                 .contains(widget.movieId) &&
-                                            Provider.of<DownloadsProvider>(
-                                                            context)
+                                            Provider.of<DownloadsProvider>(context)
                                                         .data[widget.movieId]
                                                     ["percentage"] <
                                                 100
                                         ? SizedBox(
-                                            height: Provider.of<DownloadsProvider>(
-                                                            context)
-                                                        .data[widget.movieId]?
-                                                    ["percentage"] < 100 ? height * 0.035 : null,
+                                            height:
+                                                Provider.of<DownloadsProvider>(
+                                                                        context)
+                                                                    .data[
+                                                                widget.movieId]
+                                                            ?["percentage"] <
+                                                        100
+                                                    ? height * 0.035
+                                                    : null,
                                             child: Stack(
                                               children: [
                                                 Center(
@@ -358,27 +399,38 @@ class _MovieDetailsState extends State<MovieDetails>
                                               ],
                                             ),
                                           )
-                                        : Provider.of<DownloadsProvider>(
-                                                    context)
+                                        : Provider.of<DownloadsProvider>(context)
                                                 .downloadingMovies
                                                 .contains(widget.movieId)
                                             ? const CircularProgressIndicator()
                                             : Icon(FeatherIcons.download,
                                                 color: Provider.of<DownloadsProvider>(
-                                                            context)
-                                                        .data[widget.movieId]?
-                                                    ["percentage"] == 100 ? primaryColor : white, size: 24.sp),
+                                                                    context)
+                                                                .data[widget.movieId]
+                                                            ?["percentage"] ==
+                                                        100
+                                                    ? primaryColor
+                                                    : white,
+                                                size: 24.sp),
                                     SizedBox(height: height * 0.005),
                                     Text(
-                                      Provider.of<DownloadsProvider>(
-                                                            context)
-                                                        .data[widget.movieId]?
-                                                    ["percentage"] == 100 ? "Downloaded" : "Download",
+                                      Provider.of<DownloadsProvider>(context)
+                                                      .data[widget.movieId]
+                                                  ?["percentage"] ==
+                                              100
+                                          ? "Downloaded"
+                                          : "Download",
                                       style: TextStyle(
-                                          color: white, fontSize: Provider.of<DownloadsProvider>(
-                                                            context)
-                                                        .data[widget.movieId]?
-                                                    ["percentage"] == 100 ? 10.5.sp : 12.sp),
+                                          color: white,
+                                          fontSize:
+                                              Provider.of<DownloadsProvider>(
+                                                                      context)
+                                                                  .data[
+                                                              widget.movieId]
+                                                          ?["percentage"] ==
+                                                      100
+                                                  ? 10.5.sp
+                                                  : 12.sp),
                                     ),
                                   ],
                                 ),

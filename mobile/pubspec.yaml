@@ -36,6 +36,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
+  flutter_webview_plugin: ^0.4.0
   flutter_screenutil: ^5.0.0+2
   flutter_share: ^2.0.0
   flutter_stripe: ^2.3.0
@@ -48,6 +49,7 @@ dependencies:
   path_provider: ^2.0.9
   provider: ^5.0.0
   shared_preferences: ^2.0.12
+  webview_flutter: ^3.0.1
   youtube_player_flutter: ^8.0.0
 
 dev_dependencies:

@@ -170,6 +170,7 @@ class MoviesProvider extends ChangeNotifier {
   }
 
   createContinueWatching(String movieId, String duration) async {
+    print("dwedewdew");
     Map<String, String> headers = {
       "Authorization":
           "JWT " + Provider.of<UserProvider>(Get.context!, listen: false).token,
@@ -177,8 +178,8 @@ class MoviesProvider extends ChangeNotifier {
     };
 
     Map<String, dynamic> body = {"movieId": movieId, "duration": duration};
-    await http.post(Uri.parse("$serverURL/history/"),
-        headers: headers, body: jsonEncode(body));
+    print((await http.post(Uri.parse("$serverURL/history/"),
+        headers: headers, body: jsonEncode(body))).body);
     getContinueWatching();
   }
 
