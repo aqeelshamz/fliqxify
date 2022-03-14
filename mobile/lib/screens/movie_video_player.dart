@@ -78,7 +78,7 @@ class _MovieVideoPlayerState extends State<MovieVideoPlayer> {
         var position =
             await _betterPlayerController?.videoPlayerController?.position;
         var totalDuration = _betterPlayerController
-            ?.videoPlayerController?.bufferingConfiguration.maxBufferMs;
+            ?.videoPlayerController?.absolutePosition;
         Provider.of<MoviesProvider>(context, listen: false)
             .createContinueWatching(widget.movieId,
                 "${position.toString()}#${totalDuration.toString()}");

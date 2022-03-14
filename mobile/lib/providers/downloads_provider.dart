@@ -10,13 +10,35 @@ import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DownloadsProvider extends ChangeNotifier {
   List<String> downloadingMovies = [];
   Map<String, dynamic> data = {};
 
+  void getDownloads() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList("downloads") == null) {
+      return;
+    }
+    List<String> prefsData = prefs.getStringList("downloads")!;
+    for (var movieData in prefsData) {
+      List<String> attributes = movieData.split("%%");
+      var downloadData = {
+        "movieId": attributes[0],
+        "percentage": int.parse(attributes[1]),
+        "file": attributes[2],
+        "totalSize": int.parse(attributes[3]),
+        "poster": attributes[4],
+        "title": attributes[5]
+      };
+      data[attributes[0]] = downloadData;
+    }
+    notifyListeners();
+  }
+
   void downloadMovie(String movieId) async {
-    if(downloadingMovies.contains(movieId)){
+    if (downloadingMovies.contains(movieId)) {
       return;
     }
     downloadingMovies.add(movieId);
@@ -45,7 +67,7 @@ class DownloadsProvider extends ChangeNotifier {
       return;
     }
 
-    print(response.body);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String downloadUrl = jsonDecode(response.body)["url"];
     String title = jsonDecode(response.body)["title"];
@@ -60,13 +82,55 @@ class DownloadsProvider extends ChangeNotifier {
         "movieId": movieId,
         "percentage": percentage,
         "file": filePath,
-        "totalSize" : total,
-        "poster" : poster,
-        "title" : title
+        "totalSize": total,
+        "poster": poster,
+        "title": title
       };
       data[movieId] = downloadData;
       if (percentage >= 100) {
+        print("setting");
         downloadingMovies.remove(movieId);
+        if (prefs.getStringList("downloads") == null) {
+          List<String> prefsData = [];
+          prefsData.add(movieId +
+              "%%" +
+              percentage.toString() +
+              "%%" +
+              filePath +
+              "%%" +
+              total.toString() +
+              "%%" +
+              poster +
+              "%%" +
+              title);
+          prefs.setStringList("downloads", prefsData);
+        } else {
+          List<String> prefsData = prefs.getStringList("downloads")!;
+          if (!prefsData.contains(movieId +
+              "%%" +
+              percentage.toString() +
+              "%%" +
+              filePath +
+              "%%" +
+              total.toString() +
+              "%%" +
+              poster +
+              "%%" +
+              title)) {
+            prefsData.add(movieId +
+                "%%" +
+                percentage.toString() +
+                "%%" +
+                filePath +
+                "%%" +
+                total.toString() +
+                "%%" +
+                poster +
+                "%%" +
+                title);
+            prefs.setStringList("downloads", prefsData);
+          }
+        }
       }
       notifyListeners();
     });

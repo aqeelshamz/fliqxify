@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:netflixclone/utils/colors.dart';
 import 'package:netflixclone/utils/size.dart';
 import 'package:netflixclone/widgets/back_btn.dart';
@@ -223,7 +224,9 @@ class _SettingsState extends State<Settings> {
                             FeatherIcons.trash,
                             color: white,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Fluttertoast.showToast(msg: "Downloads deleted!", backgroundColor: primaryColor);
+                          },
                         ),
                       ],
                     ),

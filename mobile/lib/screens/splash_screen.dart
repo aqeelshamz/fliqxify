@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:netflixclone/providers/downloads_provider.dart';
 import 'package:netflixclone/providers/movies.dart';
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/screens/get_started.dart';
@@ -97,6 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
           .changeEmail(prefs.getString("email")!);
       Provider.of<UserProvider>(context, listen: false)
           .changeToken(prefs.getString("token")!);
+      Provider.of<DownloadsProvider>(context, listen: false).getDownloads();
       Get.offAll(() => const Home());
     }
   }

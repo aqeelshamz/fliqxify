@@ -76,7 +76,7 @@ class _DownloadsState extends State<Downloads> {
                               child: Image.network(
                                   "https://image.tmdb.org/t/p/w200" + Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["poster"],
                                   width: width * 0.3,
-                                  height: height * 0.1,
+                                  height: height * 0.2,
                                   fit: BoxFit.cover),
                             ),
                             SizedBox(width: width * 0.04),
@@ -100,7 +100,72 @@ class _DownloadsState extends State<Downloads> {
                             SizedBox(width: width * 0.04),
                             Column(
                               children: [
-                                Icon(FeatherIcons.checkCircle, color: white)
+                                Provider.of<DownloadsProvider>(context)
+                                                .data
+                                                .keys
+                                                .contains(Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["movieId"]) &&
+                                            Provider.of<DownloadsProvider>(context)
+                                                        .data[Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["movieId"]]
+                                                    ["percentage"] <
+                                                100
+                                        ? SizedBox(
+                                            height:
+                                                Provider.of<DownloadsProvider>(
+                                                                        context)
+                                                                    .data[
+                                                                Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["movieId"]]
+                                                            ?["percentage"] <
+                                                        100
+                                                    ? height * 0.035
+                                                    : null,
+                                                    width:
+                                                Provider.of<DownloadsProvider>(
+                                                                        context)
+                                                                    .data[
+                                                                Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["movieId"]]
+                                                            ?["percentage"] <
+                                                        100
+                                                    ? height * 0.035
+                                                    : null,
+                                            child: Stack(
+                                              children: [
+                                                Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: double.parse(Provider
+                                                                .of<DownloadsProvider>(
+                                                                    context)
+                                                            .data[
+                                                                Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["movieId"]]
+                                                                ["percentage"]
+                                                            .toString()) /
+                                                        100,
+                                                    valueColor:
+                                                        const AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Colors.white),
+                                                    strokeWidth: 2.5,
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    Provider.of<DownloadsProvider>(
+                                                                context)
+                                                            .data[
+                                                                Provider.of<DownloadsProvider>(context).data[Provider.of<DownloadsProvider>(context).data.keys.toList()[index]]["movieId"]]
+                                                                ["percentage"]
+                                                            .toString() +
+                                                        "%",
+                                                    style: TextStyle(
+                                                      color: white,
+                                                      fontSize: 8.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Icon(FeatherIcons.checkCircle, color: white)
                               ],
                             ),
                           ],

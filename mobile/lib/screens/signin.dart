@@ -93,7 +93,7 @@ class _SignInState extends State<SignIn> {
                       EdgeInsets.symmetric(horizontal: width * 0.04),
                   suffixIcon: IconButton(
                     icon: Icon(
-                        !_showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
+                        _showPassword ? FeatherIcons.eyeOff : FeatherIcons.eye,
                         color: grey3),
                     onPressed: () {
                       setState(() {

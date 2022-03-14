@@ -361,6 +361,15 @@ class _MovieDetailsState extends State<MovieDetails>
                                                         100
                                                     ? height * 0.035
                                                     : null,
+                                                    width:
+                                                Provider.of<DownloadsProvider>(
+                                                                        context)
+                                                                    .data[
+                                                                widget.movieId]
+                                                            ?["percentage"] <
+                                                        100
+                                                    ? height * 0.035
+                                                    : null,
                                             child: Stack(
                                               children: [
                                                 Center(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:netflixclone/providers/user.dart';
 import 'package:netflixclone/utils/api.dart';
 import 'package:netflixclone/utils/colors.dart';
+import 'package:netflixclone/utils/size.dart';
 import 'package:provider/provider.dart';
 
 class MoviesProvider extends ChangeNotifier {
@@ -166,6 +168,28 @@ class MoviesProvider extends ChangeNotifier {
     for (var movie in continueWatching) {
       playedMovies.add(movie["movie"]["id"].toString());
     }
+
+    // print(Provider.of<MoviesProvider>(Get.context!, listen: false)
+    //                 .continueWatching[0]["duration"]);
+
+    // print(parseTime(Provider.of<MoviesProvider>(Get.context!, listen: false)
+    //                 .continueWatching[0]["duration"]
+    //                 .split("#")[0])
+    //             .inMilliseconds);
+
+    //             print(int.parse(Provider.of<MoviesProvider>(Get.context!, listen: false)
+    //             .continueWatching[0]["duration"]
+    //             .split("#")[1]));
+
+    // print(((width * 0.3) / 100) *
+    //     (parseTime(Provider.of<MoviesProvider>(Get.context!, listen: false)
+    //                 .continueWatching[0]["duration"]
+    //                 .split("#")[0])
+    //             .inMilliseconds /
+    //         int.parse(Provider.of<MoviesProvider>(Get.context!, listen: false)
+    //             .continueWatching[0]["duration"]
+    //             .split("#")[1]) *
+    //         100));
     notifyListeners();
   }
 
@@ -179,11 +203,12 @@ class MoviesProvider extends ChangeNotifier {
 
     Map<String, dynamic> body = {"movieId": movieId, "duration": duration};
     print((await http.post(Uri.parse("$serverURL/history/"),
-        headers: headers, body: jsonEncode(body))).body);
+            headers: headers, body: jsonEncode(body)))
+        .body);
     getContinueWatching();
   }
 
-  removeContinueWatching(String movieId)async{
+  removeContinueWatching(String movieId) async {
     Map<String, String> headers = {
       "Authorization":
           "JWT " + Provider.of<UserProvider>(Get.context!, listen: false).token,
