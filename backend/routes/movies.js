@@ -283,7 +283,7 @@ router.post("/get-download-url", validate, async (req, res)=>{
 
   try{
     const data = await schema.validateAsync(req.body);
-    const movie = await Movie.findById(data.movieId);
+    const movie = await Movie.findOne({movieId: data.movieId});
     if(!movie) return res.status(404).send("File not found");
     const url = "https://fliqxify-backend.aqeelshamz.com/" + movie.movieFile;
     return res.send({
@@ -292,7 +292,6 @@ router.post("/get-download-url", validate, async (req, res)=>{
     });
   }
   catch(err){
-    console.log(err);
     return res.status(500).send("Something went wrong");
   }
 })
